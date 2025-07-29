@@ -1,0 +1,13 @@
+<div class="product-grid">
+    @for (product of products; track product) {
+    <div class="product-card">
+        @if (product.imageUrl) {
+        <img [src]="product.imageUrl" alt="{{product.name}}">
+        }
+        <h3>{{product.name}}</h3>
+        <p>{{product.description}}</p>
+        <p class="price">{{product.price}}EUR</p>
+        <button (click)="addToCart(product)">Add to Cart</button>
+    </div>
+    }
+</div>

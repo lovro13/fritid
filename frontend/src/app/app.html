@@ -1,0 +1,10 @@
+<header>
+  <h1>Fritid Shop</h1>
+  <nav>
+    <a [routerLink]="['/']">Products</a>
+    <a [routerLink]="['/cart']">Cart ({{ cartItemCount }})</a>
+    <!-- <a routerLink="['/']" (click)="testClick()">TEST</a> -->
+  </nav>
+</header>
+
+<router-outlet></router-outlet>
