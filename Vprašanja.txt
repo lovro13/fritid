@@ -1,0 +1,3 @@
+Vprašanja:
+-- kaj točno dela minimax, kaj potrebuje iz API-ja
+-- ali novice lahko spustim
