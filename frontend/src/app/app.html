@@ -1,10 +1,20 @@
 <header>
-  <h1>Fritid Shop</h1>
+  <div class="left-info"></div>
+  <div class="center-logo">
+    <a routerLink="/" class="logo-link">
+      <img 
+      src="assets/fritid_logo.png" 
+      alt="Fritid Shop Logo"
+      class="logo"
+      >
+    </a>
+  </div>
   <nav>
-    <a [routerLink]="['/']">Products</a>
-    <a [routerLink]="['/cart']">Cart ({{ cartItemCount }})</a>
-    <!-- <a routerLink="['/']" (click)="testClick()">TEST</a> -->
+    <a [routerLink]="['/']">Domov</a>
+    <a [routerLink]="['/cart']">Košarica ({{ cartItemCount }})</a>
   </nav>
 </header>
 
 <router-outlet></router-outlet>
+
+<app-footer></app-footer>

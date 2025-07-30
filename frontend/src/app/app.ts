@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { CartService } from './services/cart.service';
 import { RouterLink, RouterOutlet } from '@angular/router';
+import { FooterComponent } from './components/footer/footer.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
-  imports: [RouterOutlet, RouterLink]
+  imports: [RouterOutlet, RouterLink, FooterComponent]
 })
 export class App{
   get cartItemCount() {

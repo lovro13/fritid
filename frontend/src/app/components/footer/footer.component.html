@@ -1,0 +1,58 @@
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Contact Information -->
+    <div class="footer-section">
+      <h3 class="footer-title">Kontaktni podatki</h3>
+      <div class="contact-item">
+        <i class="icon location-icon"></i>
+        <span class="contact-text">{{ contactInfo.address }}</span>
+      </div>
+      <div class="contact-item">
+        <i class="icon phone-icon"></i>
+        <span class="contact-text">{{ contactInfo.phone }}</span>
+      </div>
+      <div class="contact-item">
+        <i class="icon email-icon"></i>
+        <a href="mailto:{{ contactInfo.email }}" class="contact-link">{{ contactInfo.email }}</a>
+      </div>
+    </div>
+
+    <!-- General Information -->
+    <div class="footer-section">
+      <h3 class="footer-title">Splošne informacije</h3>
+      <ul class="footer-links">
+        @for (item of generalInfo; track item) {
+          <li>
+            <a [routerLink]="['item.link']" class="footer-link">{{ item.label }}</a>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <!-- General Terms -->
+    <div class="footer-section">
+      <h3 class="footer-title">Splošni pogoji</h3>
+      <ul class="footer-links">
+        @for (item of generalTerms; track item) {
+          <li>
+            <a [routerLink]="['item.link']" class="footer-link">{{ item.label }}</a>
+            <!-- <p>TODO link</p> -->
+          </li>
+        }
+      </ul>
+    </div>
+
+    <!-- My Data -->
+    <div class="footer-section">
+      <h3 class="footer-title">Moji podatki</h3>
+      <ul class="footer-links">
+        @for (item of myData; track item){
+          <li>
+            <a [routerLink]="['item.link']" class="footer-link">{{ item.label }}</a>
+             <!-- <p>TODO link</p> -->
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</footer>
