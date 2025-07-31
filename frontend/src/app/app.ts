@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CartService } from './services/cart.service';
+import { CartService } from './modules/cart.module';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { FooterComponent } from './components/footer/footer.component';
 

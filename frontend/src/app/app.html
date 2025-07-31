@@ -14,7 +14,10 @@
     <a [routerLink]="['/cart']">Košarica ({{ cartItemCount }})</a>
   </nav>
 </header>
-
-<router-outlet></router-outlet>
+<body>
+  <div class="body-container">
+    <router-outlet></router-outlet>
+  </div>
+</body>
 
 <app-footer></app-footer>

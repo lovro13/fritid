@@ -1,11 +1,11 @@
 <!-- product-detail.component.html -->
 @if (product) {
 <div class="product-detail">
-  <h1>{{ product.name }}</h1>
+  <h2>{{ product.name }}</h2>
   <p class="price">{{ product.price}} EUR</p>
 
   <div class="color-selector">
-    <label>Color:</label>
+    <label>Barva:</label>
     <select>
       @for (color of product.colors; track color) {
         <option>
@@ -16,7 +16,7 @@
   </div>
 
   <div class="quantity-selector">
-    <label>Quantity:</label>
+    <label>Število:</label>
     <input 
     type="number" 
     min="1" 
@@ -26,7 +26,7 @@
   </div>
 
   <button (click)="addToCart(product)" class="btn-add-to-cart">
-    Add to Cart
+    Dodaj v košarico
   </button>
   
 </div>
