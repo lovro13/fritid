@@ -1,22 +1,24 @@
 <div class="cart-container">
-  <h2>Your Shopping Cart</h2>
-@if (cartItems.length === 0) {
+    <h2>Your Shopping Cart</h2>
+    @if (cartItems.length === 0) {
     <div class="empty-cart">
         Your cart is empty
     </div>
-}
+    }
 
-@for (item of cartItems; track item.id) {
+    @for (item of cartItems; track item) {
     <div class="cart-item">
-        <h3>{{item.name}}</h3>
-        <p>{{item.price}}EUR</p>
+        <h3>{{item.product.name}}</h3>
+        <p>Barva: {{item.selectedColor}}</p>
+        <p>Število: {{item.quantity}}</p>
+        <p>{{item.product.price}}EUR</p>
     </div>
-}
+    }
 
-@if (cartItems.length > 0) {
+    @if (cartItems.length > 0) {
     <div class="cart-footer">
         <p class="total">Total: {{total}}EUR</p>
         <button (click)="checkout()">Checkout</button>
     </div>
-}
+    }
 </div>

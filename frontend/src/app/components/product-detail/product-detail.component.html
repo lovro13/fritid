@@ -6,7 +6,7 @@
 
   <div class="color-selector">
     <label>Barva:</label>
-    <select>
+    <select type="string" [ngModel]="selectedColor">
       @for (color of product.colors; track color) {
         <option>
           {{ color }}
@@ -20,7 +20,6 @@
     <input 
     type="number" 
     min="1" 
-    max="10"
     [(ngModel)]="selectedQuantity"
     >
   </div>
@@ -28,6 +27,6 @@
   <button (click)="addToCart(product)" class="btn-add-to-cart">
     Dodaj v košarico
   </button>
-  
+
 </div>
 }

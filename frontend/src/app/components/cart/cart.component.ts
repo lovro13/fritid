@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CartService } from '../../modules/cart.module';
+import { CartItem, CartService } from '../../modules/cart.module';
 import { Product } from '../../modules/products.module';
 
 @Component({
@@ -8,10 +8,23 @@ import { Product } from '../../modules/products.module';
   styleUrls: ['./cart.component.scss']
 })
 export class CartComponent {
-  cartItems: Product[] = [];
+  cartItems: CartItem[] = [];
   total = 0;
 
   constructor(private cartService: CartService) {
+    this.cartItems = this.cartService.getCartItems();
+    this.total = this.cartService.getTotal();
+  }
+
+  updateQuantity(item: CartItem, newQuantity: number) {
+    if (newQuantity >= 1) {
+      this.cartService.updateQuantity(item.product.id, newQuantity);
+      this.total = this.cartService.getTotal();
+    }
+  }
+
+  removeItem(item: CartItem) {
+    this.cartService.removeItem(item.product.id);
     this.cartItems = this.cartService.getCartItems();
     this.total = this.cartService.getTotal();
   }

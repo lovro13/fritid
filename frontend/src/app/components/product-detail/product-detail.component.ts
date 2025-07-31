@@ -36,10 +36,8 @@ export class ProductDetailComponent implements OnInit {
 
 
   addToCart(product: any) {
-    for (let i = 0; i < this.selectedQuantity; i++) {
-      this.cartService.addToCart(product);
-    }
-    
+  
+    this.cartService.addToCart(product, this.selectedQuantity, this.selectedColor);
     // Reset quantity after adding to cart
     this.selectedQuantity = 1;
   }

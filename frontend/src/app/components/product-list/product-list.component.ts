@@ -21,10 +21,4 @@ export class ProductListComponent {
   ) {
     this.products = this.productsService.getAllProducts();
   }
-
-  addToCart(product: Product) {
-    this.cartService.addToCart(product);
-  }
-
-
 }
