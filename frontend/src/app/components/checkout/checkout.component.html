@@ -1,0 +1,56 @@
+<div class="checkout-container">
+  <h2>Checkout</h2>
+  <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input id="name" type="text" formControlName="name" placeholder="Enter your full name" required>
+      @if (checkoutForm.get('name')?.invalid && checkoutForm.get('name')?.touched) {
+      <div class="error">
+        Please enter a valid name.
+      </div>
+      }
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" placeholder="Enter your email" required>
+      @if (checkoutForm.get('email')?.invalid && checkoutForm.get('email')?.touched)
+      {
+      <div class="error">
+        Please enter a valid email address.
+      </div>
+      }
+    </div>
+    <div class="form-group">
+      <label for="cardNumber">Card Number</label>
+      <input id="cardNumber" type="text" formControlName="cardNumber"
+        placeholder="Enter card number (e.g., 1234 5678 9012 3456)" required>
+      @if (checkoutForm.get('cardNumber')?.invalid && checkoutForm.get('cardNumber')?.touched) {
+      <div class="error">
+        Please enter a valid card number.
+      </div>
+      }
+    </div>
+    <div class="form-group">
+      <label for="expiry">Expiry Date</label>
+      <input id="expiry" type="text" formControlName="expiry" placeholder="MM/YY" required>
+      @if (checkoutForm.get('expiry')?.invalid && checkoutForm.get('expiry')?.touched) {
+        <div class="error">
+          Please enter a valid expiry date (MM/YY).
+        </div>
+      }
+    </div>
+    <div class="form-group">
+      <label for="cvv">CVV</label>
+      <input id="cvv" type="text" formControlName="cvv" placeholder="Enter CVV" required>
+      @if (checkoutForm.get('cvv')?.invalid && checkoutForm.get('cvv')?.touched) {
+        <div class="error">
+          Please enter a valid CVV (3 digits).
+        </div>
+      }
+    </div>
+    <div class="checkout-footer">
+      <p class="total">Total: {{ total }} EUR</p>
+      <button type="submit" [disabled]="checkoutForm.invalid">Confirm Payment</button>
+    </div>
+  </form>
+</div>

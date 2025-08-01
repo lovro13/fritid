@@ -1,7 +1,13 @@
 import { Component } from '@angular/core';
 import { CartItem, CartService } from '../../modules/cart.module';
-import { Product } from '../../modules/products.module';
-
+// ime
+// priimek
+// naslov
+// poštna številka
+// kraj
+// elektornski naslov
+// telefon
+// ID  za DDV (podjetja) (optional)
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',

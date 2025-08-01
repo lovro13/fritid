@@ -1,23 +1,34 @@
 <div class="cart-container">
-    <h2>Your Shopping Cart</h2>
+    <h2>Vaš nakupovalni voziček</h2>
     @if (cartItems.length === 0) {
     <div class="empty-cart">
-        Your cart is empty
+        Vaš nakupovalni voziček je prazen.
     </div>
-    }
-
-    @for (item of cartItems; track item) {
-    <div class="cart-item">
-        <h3>{{item.product.name}}</h3>
-        <p>Barva: {{item.selectedColor}}</p>
-        <p>Število: {{item.quantity}}</p>
-        <p>{{item.product.price}}EUR</p>
-    </div>
-    }
-
-    @if (cartItems.length > 0) {
+    } @else {
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Color</th>
+                <th>Quantity</th>
+                <th>Price per Item</th>
+                <th>Total Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (item of cartItems; track item) {
+            <tr>
+                <td>{{item.product.name}}</td>
+                <td>{{item.selectedColor}}</td>
+                <td>{{item.quantity}}</td>
+                <td>{{item.product.price}}€</td>
+                <td>{{item.quantity * item.product.price}}€</td>
+            </tr>
+            }
+        </tbody>
+    </table>
     <div class="cart-footer">
-        <p class="total">Total: {{total}}EUR</p>
+        <p class="total">Total: {{total}} EUR</p>
         <button (click)="checkout()">Checkout</button>
     </div>
     }

@@ -1,0 +1,109 @@
+@use 'sass:color';
+
+$accent-orange: #ff9800;
+
+h2, h3 {
+  font-weight: 500;
+}
+
+.cart-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.cart-table th,
+.cart-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.cart-table th {
+  font-weight: bold;
+  background-color: #f5f5f5;
+}
+
+.cart-table tr:hover {
+  background-color: #fafafa;
+}
+
+.cart-table td:nth-child(3),
+.cart-table td:nth-child(4),
+.cart-table td:nth-child(5) {
+  text-align: right;
+}
+
+.cart-table th:nth-child(3),
+.cart-table th:nth-child(4),
+.cart-table th:nth-child(5) {
+  text-align: right;
+}
+
+.cart-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 2rem;
+  border-top: 1px solid #eee;
+  padding-top: 2rem;
+}
+
+.cart-footer .total {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: $accent-orange;
+  margin-right: 2rem;
+}
+
+.cart-footer button {
+  background: $accent-orange;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.cart-footer button:hover {
+  background: color.scale($accent-orange, $lightness: -20%);
+}
+
+.empty-cart {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .cart-container {
+    padding: 1rem;
+  }
+
+  .cart-table th,
+  .cart-table td {
+    padding: 0.5rem;
+  }
+
+  .cart-footer {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .cart-footer .total {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+}
