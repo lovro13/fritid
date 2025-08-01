@@ -1,17 +1,13 @@
 import { Component } from '@angular/core';
 import { CartItem, CartService } from '../../modules/cart.module';
-// ime
-// priimek
-// naslov
-// poštna številka
-// kraj
-// elektornski naslov
-// telefon
-// ID  za DDV (podjetja) (optional)
+import { RouterLink } from '@angular/router';
+import { DecimalPipe } from '@angular/common';
+
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.scss']
+  styleUrls: ['./cart.component.scss'],
+  imports: [RouterLink, DecimalPipe]
 })
 export class CartComponent {
   cartItems: CartItem[] = [];

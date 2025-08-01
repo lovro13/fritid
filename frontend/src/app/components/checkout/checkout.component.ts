@@ -18,17 +18,20 @@ import { Router } from '@angular/router';
   styleUrls: ['./checkout.component.scss'],
   imports: [ReactiveFormsModule]
 })
-export class CheckoutComponent implements OnInit {
+export class CheckoutComponent {
   checkoutForm: FormGroup;
   total: number = 1; // Example total from cart, replace with dynamic value if needed
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.checkoutForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
-      cardNumber: ['', [Validators.required, Validators.pattern('^[0-9]{4}\\s?[0-9]{4}\\s?[0-9]{4}\\s?[0-9]{4}$')]],
-      expiry: ['', [Validators.required, Validators.pattern('^(0[1-9]|1[0-2])/[0-9]{2}$')]],
-      cvv: ['', [Validators.required, Validators.pattern('^[0-9]{3}$')]]
+      address: ['', Validators.required],
+      postalCode: ['', [Validators.required, Validators.pattern('^[0-9]{4}$')]],
+      city: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern('^(\\+386|0)[0-9]{8}$')]],
+      companyID: [''] // Optional
     });
   }
 

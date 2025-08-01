@@ -1,26 +1,98 @@
 <div class="checkout-container">
-  <h2>Checkout</h2>
+  <h2>Postopek nakupa</h2>
   <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="name">Full Name</label>
-      <input id="name" type="text" formControlName="name" placeholder="Enter your full name" required>
-      @if (checkoutForm.get('name')?.invalid && checkoutForm.get('name')?.touched) {
+      <label for="firstName">Ime</label>
+      <input id="firstName" type="text" formControlName="firstName" placeholder="Vnesite ime" required>
+      @if (checkoutForm.get('firstName')?.invalid && checkoutForm.get('firstName')?.touched) {
       <div class="error">
-        Please enter a valid name.
+        @if (checkoutForm.get('firstName')?.hasError('required')) {
+        Ime je obvezno.
+        }
+        @if (checkoutForm.get('firstName')?.hasError('minlength')) {
+        Ime mora vsebovati vsaj 2 znaka.
+        }
+      </div>
+      }
+    </div>
+    <div class="form-group">
+      <label for="surname">Priimek</label>
+      <input id="surname" type="text" formControlName="lastName" placeholder="Vnesite priimek" required>
+      @if (checkoutForm.get('email')?.invalid && checkoutForm.get('email')?.touched) {
+      <div class="error">
+        @if (checkoutForm.get('email')?.hasError('required')) {
+        E-poštni naslov je obvezen.
+        }
+        @if (checkoutForm.get('email')?.hasError('email')) {
+        Vnesite veljaven e-poštni naslov.
+        }
       </div>
       }
     </div>
     <div class="form-group">
       <label for="email">Email</label>
-      <input id="email" type="email" formControlName="email" placeholder="Enter your email" required>
+      <input id="email" type="email" formControlName="email" placeholder="Vnesite email" required>
       @if (checkoutForm.get('email')?.invalid && checkoutForm.get('email')?.touched)
       {
       <div class="error">
-        Please enter a valid email address.
+        Vnesite pravilni mail.
       </div>
       }
     </div>
     <div class="form-group">
+      <label for="address">Naslov</label>
+      <input id="address" type="text" formControlName="address" placeholder="Vnesite naslov" required>
+      @if (checkoutForm.get('address')?.invalid && checkoutForm.get('address')?.touched)
+      {
+      <div class="error">
+        Vnesite pravilni naslov.
+      </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="postalCode">Poštna številka</label>
+      <input id="postalCode" type="number" formControlName="postalCode" placeholder="Vnesite poštno številko" required>
+      @if (checkoutForm.get('postalCode')?.invalid && checkoutForm.get('postalCode')?.touched)
+      {
+      <div class="error">
+        Vnesite veljavno poštno številko.
+      </div>
+      }
+    </div>
+    <div class="form-group">
+      <label for="city">Kraj</label>
+      <input id="city" type="text" formControlName="city" placeholder="Vnesite kraj" required>
+      @if (checkoutForm.get('city')?.invalid && checkoutForm.get('city')?.touched)
+      {
+      <div class="error">
+        Vnesite veljaven kraj.
+      </div>
+      }
+    </div>
+    <div class="form-group">
+      <label for="phone">Telefonska številka</label>
+      <input id="phone" type="tel" formControlName="phone" placeholder="Vnesite telefonsko številko" required>
+      @if (checkoutForm.get('phone')?.invalid && checkoutForm.get('phone')?.touched)
+      {
+      <div class="error">
+        Vnesite pravilno telefonsko številko.
+      </div>
+      }
+    </div>
+    <div class="form-group">
+      <label for="id-podjetja">ID za DDV(samo za podjetja)</label>
+      <input id="id-podjetja" type="text" formControlName="companyID" placeholder="Vnesite ID" required>
+    </div>
+
+    <div class="checkout-footer">
+      <p class="total">Total: {{ total }} EUR</p>
+      <button type="submit" [disabled]="checkoutForm.invalid">Nadaljujte na plačilo</button>
+    </div>
+  </form>
+</div>
+
+<!-- <div class="form-group">
       <label for="cardNumber">Card Number</label>
       <input id="cardNumber" type="text" formControlName="cardNumber"
         placeholder="Enter card number (e.g., 1234 5678 9012 3456)" required>
@@ -47,10 +119,4 @@
           Please enter a valid CVV (3 digits).
         </div>
       }
-    </div>
-    <div class="checkout-footer">
-      <p class="total">Total: {{ total }} EUR</p>
-      <button type="submit" [disabled]="checkoutForm.invalid">Confirm Payment</button>
-    </div>
-  </form>
-</div>
+    </div> -->
