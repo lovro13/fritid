@@ -11,92 +11,69 @@ export interface CartItem {
 @Injectable({ providedIn: 'root' })
 export class CartService {
   private readonly CART_KEY = 'shopping_cart';
-  private cartItems: CartItem[] = [];
-  private cartItemCount = new BehaviorSubject<number>(0);
-  cartItemCount$ = this.cartItemCount.asObservable();
+  private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
+  cartItems$ = this.cartItemsSubject.asObservable();
 
-  constructor() {this.loadCart()}
-
-  private loadCart() {
+  // ko se spletna stran začne nalagat tukaj nastavi na 
+  // voziček iz local storage ali pa praznega če voziček iz local storage ne obstaja
+  constructor() { this.loadCartFromLocalStorage() }
+  private loadCartFromLocalStorage() {
     const cartData = localStorage.getItem(this.CART_KEY);
     if (cartData) {
       try {
         console.log("sem v CartService in loadCart")
-        this.cartItems = JSON.parse(cartData);
-        this.updateCartCount();
+        this.cartItemsSubject.next(JSON.parse(cartData));
       } catch (e) {
         console.error('Error parsing cart data', e);
-        this.cartItems = [];
+        this.cartItemsSubject.next([]);
       }
     }
     console.log("sem v CartService in loadCart2")
   }
 
   private saveCart() {
-    localStorage.setItem(this.CART_KEY, JSON.stringify(this.cartItems));
-    this.updateCartCount();
+    localStorage.setItem(this.CART_KEY, JSON.stringify(this.cartItemsSubject.value));
   }
 
-  addToCart(product: any, quantity: number, color?: string) {
-    const existingItem = this.cartItems.find(item => 
-      item.product.id === product.id && item.selectedColor === color
-    );
-    
-    if (existingItem) {
-      existingItem.quantity += quantity;
-    } else {
-      this.cartItems.push({
-        product,
-        quantity,
-        selectedColor: color
-      });
-    }
-    
+  addItemToCart(product: Product, quantity: number, selectedColor: string) {
+    let cartItemsTemp = this.cartItemsSubject.value;
+    let item: CartItem = {product: product, quantity: quantity, selectedColor: selectedColor}
+    cartItemsTemp.push(item);
+    this.cartItemsSubject.next(cartItemsTemp);
     this.saveCart();
   }
 
-  getCartItems() {
-    return this.cartItems;
+  removeItemFromCart(item: CartItem) {
+    let cartItemsTemp = this.cartItemsSubject.value;
+    for (let i = 0; i < cartItemsTemp.length; i++) {
+      if (cartItemsTemp[i] == item) {
+        cartItemsTemp.splice(i, 1);
+      }
+    }
+    this.cartItemsSubject.next(cartItemsTemp);
+    this.saveCart();
   }
 
   clearCart() {
-    this.cartItems = [];
-    localStorage.removeItem(this.CART_KEY);
-    this.updateCartCount();
+    this.cartItemsSubject.next([]);
   }
 
   getTotal(): number {
-    const total = this.cartItems.reduce(
-      (total, item) => total + (item.product.price * item.quantity), 0
-    );
-    return parseFloat(total.toFixed(2));
-  }
-
-  updateQuantity(productId: number, newQuantity: number) {
-    const item = this.cartItems.find(i => i.product.id === productId);
-    if (item) {
-      item.quantity = newQuantity;
-      this.updateCartCount();
+    const cartItemsTemp = this.cartItemsSubject.value;
+    let total_temp = 0;
+    for (let i = 0; i < cartItemsTemp.length; i++) {
+      total_temp += cartItemsTemp[i].product.price * cartItemsTemp[i].quantity;
     }
-  }
-
-  removeItem(productId: number) {
-    this.cartItems = this.cartItems.filter(item => item.product.id !== productId);
-    this.updateCartCount();
+    return total_temp;
   }
 
   getCartItemsCount() {
-    let output = 0;
-    for (let i = 0; i < this.cartItems.length; i++) {
-      output += 1;
-    }
-    return output;
+    return this.cartItemsSubject.value.length
   }
 
-  private updateCartCount() {
-    const total = this.cartItems.reduce(
-      (sum, item) => sum + item.quantity, 0
-    );
-    this.cartItemCount.next(total);
+
+  ngOnDestroy() {
+    this.saveCart();
   }
+
 }

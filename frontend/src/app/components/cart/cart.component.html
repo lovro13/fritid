@@ -8,11 +8,12 @@
     <table class="cart-table">
         <thead>
             <tr>
-                <th>Product Name</th>
-                <th>Color</th>
-                <th>Quantity</th>
-                <th>Price per Item</th>
-                <th>Total Price</th>
+                <th>Izdelek</th>
+                <th>Barva</th>
+                <th>Količina</th>
+                <th>Cena enega izdelka</th>
+                <th>Skupna cena</th>
+                <th>Odstrani izdelek</th>
             </tr>
         </thead>
         <tbody>
@@ -23,6 +24,7 @@
                 <td>{{item.quantity}}</td>
                 <td>{{item.product.price}}€</td>
                 <td>{{item.quantity * item.product.price | number:'1.2-2'}}€</td>
+                <td><button class="remove-button" (click)="removeItem(item)">X</button></td>
             </tr>
             }
         </tbody>

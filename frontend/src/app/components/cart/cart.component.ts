@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { CartItem, CartService } from '../../modules/cart.module';
+import { CartItem, CartService } from '../../service/cart.service';
 import { RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -11,24 +12,20 @@ import { DecimalPipe } from '@angular/common';
 })
 export class CartComponent {
   cartItems: CartItem[] = [];
+  private cartSub!: Subscription;
   total = 0;
 
   constructor(private cartService: CartService) {
-    this.cartItems = this.cartService.getCartItems();
     this.total = this.cartService.getTotal();
   }
 
-  updateQuantity(item: CartItem, newQuantity: number) {
-    if (newQuantity >= 1) {
-      this.cartService.updateQuantity(item.product.id, newQuantity);
-      this.total = this.cartService.getTotal();
-    }
+
+  ngOnInit() {
+    this.cartSub = this.cartService.cartItems$.subscribe(items => { this.cartItems = items })
   }
 
   removeItem(item: CartItem) {
-    this.cartService.removeItem(item.product.id);
-    this.cartItems = this.cartService.getCartItems();
-    this.total = this.cartService.getTotal();
+    this.cartService.removeItemFromCart(item);
   }
 
   checkout() {
