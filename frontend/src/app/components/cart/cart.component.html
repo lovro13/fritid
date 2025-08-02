@@ -22,7 +22,7 @@
                 <td>{{item.product.name}}</td>
                 <td>{{item.selectedColor}}</td>
                 <td>{{item.quantity}}</td>
-                <td>{{item.product.price}}€</td>
+                <td>{{item.product.price | number:'1.2-2'}}€</td>
                 <td>{{item.quantity * item.product.price | number:'1.2-2'}}€</td>
                 <td><button class="remove-button" (click)="removeItem(item)">X</button></td>
             </tr>
@@ -30,7 +30,7 @@
         </tbody>
     </table>
     <div class="cart-footer">
-        <p class="total">Total: {{total}} EUR</p>
+        <p class="total">Total: {{total  | currency:'EUR' }}</p>
         <button [routerLink]="['/checkout']">Checkout</button>
     </div>
     }

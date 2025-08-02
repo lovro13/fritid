@@ -1,15 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, LOCALE_ID } from '@angular/core';
 import { CartItem, CartService } from '../../service/cart.service';
 import { RouterLink } from '@angular/router';
-import { DecimalPipe } from '@angular/common';
+import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { registerLocaleData } from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+
+registerLocaleData(localeDe);
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],
-  imports: [RouterLink, DecimalPipe]
-})
+  imports: [RouterLink, DecimalPipe, CurrencyPipe, CommonModule],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'de' } // Set German locale for this component
+  ]
+}
+)
 export class CartComponent {
   cartItems: CartItem[] = [];
   private cartSub!: Subscription;

@@ -1,16 +1,16 @@
 <div class="product-grid">
     @for (product of products; track product) {
     <div class="product-card">
-        <div class="image-container">    
+        <div class="image-container">
             <img [src]="product.imageUrl" [alt]="product.name">
         </div>
 
         <div class="card-content">
             <h3>{{ product.name }}</h3>
-            <p class="price">{{ product.price}}EUR</p>
+            <p class="price">{{ product.price | currency:'EUR'}}</p>
         </div>
 
-        <button [routerLink] = "['product', product.id]">
+        <button [routerLink]="['product', product.id]">
             Dodaj v košarico
         </button>
     </div>
