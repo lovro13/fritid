@@ -1,0 +1,126 @@
+<!-- payment-method.component.html -->
+<div class="payment-container">
+  <h2>Izberite način plačila</h2>
+
+  <div class="payment-options">
+    <!-- Card Payment -->
+    <div class="payment-option" [class.selected]="selectedMethod === 'card'" (click)="selectMethod('card')">
+      <div class="option-header">
+        <i class="icon credit-card"></i>
+        <h3>Kartica</h3>
+      </div>
+      <p>Varno plačilo s kreditno ali debetno kartico</p>
+      <div class="card-icons">
+        <i class="visa"></i>
+        <i class="mastercard"></i>
+        <i class="maestro"></i>
+      </div>
+    </div>
+
+    <!-- Cash on Delivery -->
+    <div class="payment-option" [class.selected]="selectedMethod === 'cash'" (click)="selectMethod('cash')">
+      <div class="option-header">
+        <i class="icon cash"></i>
+        <h3>Po prevzetju</h3>
+      </div>
+      <p>Plačilo v gotovini ob prevzemu paketa</p>
+    </div>
+
+    <!-- Online Banking -->
+    <div class="payment-option" [class.selected]="selectedMethod === 'bank'" (click)="selectMethod('bank')">
+      <div class="option-header">
+        <i class="icon bank"></i>
+        <h3>Spletna banka</h3>
+      </div>
+      <p>Plačilo preko spletne banke</p>
+      <div class="bank-icons">
+        <i class="nlb"></i>
+        <i class="skb"></i>
+        <i class="abanka"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card Payment Form -->
+  @if (selectedMethod === 'card') {
+  <div class="payment-form">
+    <h3>Podatki o kartici</h3>
+    <form [formGroup]="cardForm" (ngSubmit)="processPayment()">
+      <div class="form-group">
+        <label for="cardNumber">Številka kartice</label>
+        <input id="cardNumber" type="text" formControlName="cardNumber" placeholder="1234 5678 9012 3456">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="expiryDate">Veljavnost</label>
+          <input id="expiryDate" type="text" formControlName="expiryDate" placeholder="MM/YY">
+        </div>
+
+        <div class="form-group">
+          <label for="cvv">CVV</label>
+          <input id="cvv" type="text" formControlName="cvv" placeholder="123">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="cardHolder">Ime na kartici</label>
+        <input id="cardHolder" type="text" formControlName="cardHolder" placeholder="Vnesite ime">
+      </div>
+
+      <div class="security-note">
+        <i class="lock-icon"></i>
+        <p>Vaši podatki so varni. Vaše plačilne podatke ne shranjujemo.</p>
+      </div>
+
+      <button type="submit" class="pay-button" [disabled]="cardForm.invalid">
+        Plačaj {{ total | currency:'EUR' }}
+      </button>
+    </form>
+  </div>
+  }
+
+  <!-- Cash on Delivery Confirmation -->
+  @if (selectedMethod == 'cash') {
+
+  <div class="payment-confirmation">
+    <div class="confirmation-content">
+      <i class="icon cash-large"></i>
+      <h3>Plačilo po prevzetju</h3>
+      <p>Pri prevzemu paketa boste plačali v gotovini.</p>
+      <p>Skupni znesek: <strong>{{ total | currency:'EUR' }}</strong></p>
+      <button class="confirm-button" (click)="confirmCashPayment()">Potrdi naročilo</button>
+    </div>
+  </div>
+  }
+
+  <!-- Online Banking Form -->
+  @if (selectedMethod === 'bank') {
+
+  <div class="payment-form">
+    <h3>Izberite svojo banko</h3>
+
+    <div class="bank-options">
+      @for (bank of banks; track bank) {
+      <div class="bank-option" (click)="selectBank(bank)">
+        <div class="bank-logo" [class.selected]="selectedBank === bank">
+          <img [src]="'assets/banks/' + bank + '.png'" [alt]="bank">
+        </div>
+        <p>{{ getBankName(bank) }}</p>
+      </div>
+      }
+    </div>
+    @if (selectedBank) {
+      <div class="bank-instructions">
+        <h4>Navodila za plačilo</h4>
+        <p>Po kliku na gumb boste preusmerjeni na spletno stran {{ getBankName(selectedBank) }}.</p>
+        <p>Tam se boste prijavili in potrdili plačilo.</p>
+        
+        <button class="pay-button" (click)="processBankPayment()">
+          Nadaljuj na {{ getBankName(selectedBank) }}
+        </button>
+      </div>
+    }
+  </div>
+  }
+</div>

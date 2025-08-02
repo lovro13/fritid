@@ -110,14 +110,14 @@ Morebitni spori med strankami, ki izvirajo ali so v kakršnikoli povezavi z elek
 
 Plačati je mogoče:
 
-Po povzetju; 
-Kupec poravna stroške kupnine ob dostavi.
+-Po povzetju:
+    Kupec poravna stroške kupnine ob dostavi.
 
-Osebni prevzem 
-Kupec poravna stroške kupnine ob prevzemu pošiljke.
+-Osebni prevzem: 
+    Kupec poravna stroške kupnine ob prevzemu pošiljke.
 
-Preko spletne banke
-Kupec poravna stroške preko spletne banke. Ko je transakcija vidna na naši strani, se pošiljka pošlje.` },
+-Preko spletne banke:
+    Kupec poravna stroške preko spletne banke. Ko je transakcija vidna na naši strani, se pošiljka pošlje.` },
     {
       id: 7, label: 'Pogoji dostave in davki', link: '/info/7', content: `
 Kako vam bo dostavljeno naročeno blago?

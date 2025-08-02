@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 // ime
 // priimek
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
-  imports: [ReactiveFormsModule]
+  imports: [ReactiveFormsModule, RouterLink]
 })
 export class CheckoutComponent {
   checkoutForm: FormGroup;

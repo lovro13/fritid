@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { Info } from './components/info/info';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { PaymentMethodComponent } from './components/payment-method/payment-method.component';
 
 export const routes: Routes = [ 
   { path: '', component: ProductListComponent },
@@ -12,6 +13,7 @@ export const routes: Routes = [
   { path: 'product/:id', component: ProductDetailComponent },
   { path: 'info/:id', component: Info},
   { path: 'checkout', component: CheckoutComponent },
+  { path: 'payment-method', component: PaymentMethodComponent}
   // { path: '**', redirectTo: '' }
 ];
 

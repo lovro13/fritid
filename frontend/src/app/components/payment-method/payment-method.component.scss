@@ -1,0 +1,277 @@
+/* payment-method.component.scss */
+.payment-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h2 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+.payment-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.payment-option {
+  border: 2px solid #ecf0f1;
+  border-radius: 10px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    border-color: #3498db;
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.1);
+  }
+  
+  &.selected {
+    border-color: #3498db;
+    background-color: rgba(52, 152, 219, 0.05);
+    
+    .option-header h3 {
+      color: #3498db;
+    }
+  }
+}
+
+.option-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  
+  .icon {
+    font-size: 24px;
+    margin-right: 15px;
+  }
+  
+  h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #2c3e50;
+  }
+}
+
+.payment-option p {
+  color: #7f8c8d;
+  margin-bottom: 15px;
+}
+
+.card-icons, .bank-icons {
+  display: flex;
+  gap: 10px;
+  
+  span {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    
+    &.visa { background: #1a1f71; color: white; }
+    &.mastercard { background: #eb001b; color: white; }
+    &.maestro { background: #0099ff; color: white; }
+    &.nlb { background: #005baa; color: white; }
+    &.skb { background: #e2001a; color: white; }
+    &.abanka { background: #00a650; color: white; }
+  }
+}
+
+.payment-form {
+  margin-top: 30px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  
+  h3 {
+    margin-top: 0;
+    color: #2c3e50;
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+  
+  .form-group {
+    flex: 1;
+  }
+}
+
+.form-group {
+  margin-bottom: 20px;
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #2c3e50;
+  }
+  
+  input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    
+    &:focus {
+      border-color: #3498db;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+  }
+}
+
+.security-note {
+  display: flex;
+  align-items: center;
+  background: #e8f4fc;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+  
+  .lock-icon {
+    margin-right: 10px;
+    font-size: 20px;
+  }
+  
+  p {
+    margin: 0;
+    color: #3498db;
+  }
+}
+
+.pay-button {
+  width: 100%;
+  padding: 14px;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+  
+  &:hover {
+    background: #219653;
+  }
+  
+  &:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+  }
+}
+
+.payment-confirmation {
+  margin-top: 30px;
+  padding: 30px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  text-align: center;
+  
+  .confirmation-content {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .icon.cash-large {
+    font-size: 48px;
+    margin: 0 auto 20px;
+    display: block;
+  }
+  
+  h3 {
+    color: #27ae60;
+    margin-bottom: 15px;
+  }
+  
+  p {
+    color: #7f8c8d;
+    margin-bottom: 10px;
+    
+    strong {
+      color: #2c3e50;
+      font-size: 18px;
+    }
+  }
+}
+
+.confirm-button {
+  margin-top: 20px;
+  padding: 12px 30px;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+  
+  &:hover {
+    background: #219653;
+  }
+}
+
+.bank-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.bank-option {
+  text-align: center;
+  cursor: pointer;
+  
+  .bank-logo {
+    padding: 15px;
+    background: white;
+    border: 2px solid #ecf0f1;
+    border-radius: 10px;
+    transition: all 0.3s;
+    
+    &.selected {
+      border-color: #3498db;
+      background-color: rgba(52, 152, 219, 0.05);
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+  }
+}
+
+.bank-instructions {
+  background: #e8f4fc;
+  padding: 20px;
+  border-radius: 8px;
+  
+  h4 {
+    margin-top: 0;
+    color: #3498db;
+  }
+  
+  p {
+    color: #7f8c8d;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .payment-options {
+    grid-template-columns: 1fr;
+  }
+}

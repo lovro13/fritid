@@ -82,12 +82,14 @@
     </div>
     <div class="form-group">
       <label for="id-podjetja">ID za DDV(samo za podjetja)</label>
-      <input id="id-podjetja" type="text" formControlName="companyID" placeholder="Vnesite ID" required>
+      <input id="id-podjetja" type="text" formControlName="companyID" placeholder="Vnesite ID">
     </div>
 
     <div class="checkout-footer">
       <p class="total">Total: {{ total }} EUR</p>
-      <button type="submit" [disabled]="checkoutForm.invalid">Nadaljujte na plačilo</button>
+      <button type="submit" [disabled]="checkoutForm.invalid" [routerLink]="['/payment-method']">
+        Nadaljujte na plačilo
+      </button>
     </div>
   </form>
 </div>
