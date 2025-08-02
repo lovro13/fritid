@@ -87,7 +87,7 @@
 
     <div class="checkout-footer">
       <p class="total">Total: {{ total }} EUR</p>
-      <button type="submit" [disabled]="checkoutForm.invalid" [routerLink]="['/payment-method']">
+      <button type="submit" [disabled]="checkoutForm.invalid" [routerLink]="['/payment-method']" (click)="onSubmit()">
         Nadaljujte na plačilo
       </button>
     </div>

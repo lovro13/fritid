@@ -36,10 +36,17 @@ export class CartService {
   }
 
   addItemToCart(product: Product, quantity: number, selectedColor: string) {
-    let cartItemsTemp = this.cartItemsSubject.value;
-    let item: CartItem = {product: product, quantity: quantity, selectedColor: selectedColor}
-    cartItemsTemp.push(item);
-    this.cartItemsSubject.next(cartItemsTemp);
+    let currentItems = this.cartItemsSubject.value;
+    const existingItem = currentItems.find(item =>
+      item.product.id === product.id &&
+      item.selectedColor === selectedColor
+    );
+    if (existingItem) {
+      existingItem.quantity += quantity;
+    } else {
+      currentItems.push({ product, quantity, selectedColor });
+    }
+    this.cartItemsSubject.next(currentItems);
     this.saveCart();
   }
 

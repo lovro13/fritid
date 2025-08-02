@@ -17,7 +17,7 @@ registerLocaleData(localeDe);
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
-  imports: [RouterLink, FormModule, DecimalPipe, CurrencyPipe],
+  imports: [RouterLink, FormModule, CurrencyPipe],
   providers: [
     { provide: LOCALE_ID, useValue: 'de' } // Now LOCALE_ID is properly imported
   ]
