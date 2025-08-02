@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { ProductsService } from '../../modules/products.module';
-import { CartService } from '../../modules/cart.module';
-import { Product } from '../../modules/products.module';
+import { ProductsService } from '../../service/products.service';
+import { CartService } from '../../service/cart.service';
+import { Product } from '../../service/products.service';
 import { Router, RouterLink } from '@angular/router';
 import { FormModule } from '@coreui/angular';
 

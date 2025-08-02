@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { InfoPage, InfoService } from '../../modules/info.module';
+import { InfoPage, InfoService } from '../../service/info.service';
 import { Subscription } from 'rxjs';
 
 @Component({
