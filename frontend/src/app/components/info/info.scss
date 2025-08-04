@@ -1,7 +1,250 @@
+// Modern Info Component Styling
+@use 'sass:color';
+
+// Color palette
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+$success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+$accent-orange: #ff9800;
+$text-primary: #2c3e50;
+$text-secondary: #7f8c8d;
+$border-color: #e1e8ed;
+$background-light: #f8fafc;
+$white: #ffffff;
+
 .preserve-newlines {
     white-space: pre-wrap;
+    line-height: 1.8;
+    color: $text-primary;
+    font-size: 1.1rem;
+    
+    p {
+        margin-bottom: 1.5rem;
+        
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
 }
 
+// Modern container styling
+:host {
+    display: block;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 2rem 1rem;
+}
+
+// Enhanced heading styles
 h2 {
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: $white;
+    text-align: center;
+    margin: 0 0 2rem 0;
+    padding: 2rem;
+    background: $primary-gradient;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    position: relative;
+    overflow: hidden;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+        animation: rainbow 3s ease-in-out infinite;
+    }
+    
+    &::after {
+        content: '📚';
+        position: absolute;
+        right: 2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 2rem;
+        animation: pulse 2s infinite;
+    }
+}
+
+// Content container
+.info-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: $white;
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: $success-gradient;
+    }
+}
+
+// Enhanced text styling
+h3 {
+    color: $text-primary;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 2rem 0 1rem 0;
+    position: relative;
+    padding-left: 2rem;
+    
+    &::before {
+        content: '▶';
+        position: absolute;
+        left: 0;
+        color: #667eea;
+        font-size: 1.2rem;
+    }
+}
+
+h4 {
+    color: #667eea;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.8rem 0;
+}
+
+p {
+    color: $text-primary;
+    line-height: 1.8;
+    margin-bottom: 1.2rem;
+    font-size: 1.1rem;
+    
+    strong {
+        color: #667eea;
+        font-weight: 600;
+    }
+}
+
+// List styling
+ul, ol {
+    padding-left: 2rem;
+    margin-bottom: 1.5rem;
+    
+    li {
+        color: $text-primary;
+        margin-bottom: 0.8rem;
+        line-height: 1.7;
+        position: relative;
+        
+        &::marker {
+            color: #667eea;
+        }
+    }
+}
+
+// Links styling
+a {
+    color: #667eea;
+    text-decoration: none;
     font-weight: 500;
+    transition: all 0.3s ease;
+    
+    &:hover {
+        color: #764ba2;
+        text-decoration: underline;
+    }
+}
+
+// Special sections styling
+.highlight-box {
+    background: linear-gradient(135deg, #667eea10, #764ba210);
+    border: 2px solid #667eea30;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    position: relative;
+    
+    &::before {
+        content: '💡';
+        position: absolute;
+        top: -10px;
+        left: 1rem;
+        background: $white;
+        padding: 0 0.5rem;
+        font-size: 1.2rem;
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    :host {
+        padding: 1rem 0.5rem;
+    }
+    
+    h2 {
+        font-size: 2rem;
+        padding: 1.5rem;
+        
+        &::after {
+            right: 1rem;
+            font-size: 1.5rem;
+        }
+    }
+    
+    .info-content {
+        padding: 2rem 1.5rem;
+    }
+    
+    h3 {
+        font-size: 1.5rem;
+    }
+    
+    h4 {
+        font-size: 1.2rem;
+    }
+    
+    p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 1.8rem;
+        padding: 1rem;
+    }
+    
+    .info-content {
+        padding: 1.5rem 1rem;
+    }
+    
+    h3 {
+        font-size: 1.3rem;
+        padding-left: 1.5rem;
+    }
+}
+
+// Animations
+@keyframes rainbow {
+    0%, 100% { 
+        background-position: 0% 50%; 
+    }
+    50% { 
+        background-position: 100% 50%; 
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        transform: translateY(-50%) scale(1); 
+    }
+    50% { 
+        transform: translateY(-50%) scale(1.1); 
+    }
 }

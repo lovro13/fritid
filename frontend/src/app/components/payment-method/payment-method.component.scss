@@ -1,106 +1,234 @@
-/* payment-method.component.scss */
+/* Modern Payment Method Component Styling */
+@use 'sass:color';
+
+// Color palette
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+$success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+$accent-orange: #ff9800;
+$text-primary: #2c3e50;
+$text-secondary: #7f8c8d;
+$border-color: #e1e8ed;
+$background-light: #f8fafc;
+$white: #ffffff;
+$error-color: #e74c3c;
+$success-color: #27ae60;
+
 .payment-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 2rem 1rem;
+  
+  max-width: none;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+// Modern header styling
 h2 {
-  color: #2c3e50;
+  color: $white;
   text-align: center;
-  margin-bottom: 30px;
-  font-size: 28px;
+  margin: 0 0 3rem 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+  padding: 2rem;
+  background: $primary-gradient;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+    animation: rainbow 3s ease-in-out infinite;
+  }
+  
+  &::after {
+    content: '💳';
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    animation: pulse 2s infinite;
+  }
+}
+
+// Content container
+.payment-content {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .payment-options {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .payment-option {
-  border: 2px solid #ecf0f1;
-  border-radius: 10px;
-  padding: 20px;
+  background: $white;
+  border: 2px solid transparent;
+  border-radius: 20px;
+  padding: 2rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
   
   &:hover {
-    border-color: #3498db;
-    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
   }
   
   &.selected {
-    border-color: #3498db;
-    background-color: rgba(52, 152, 219, 0.05);
+    border-color: #667eea;
+    background: linear-gradient(135deg, #667eea10, #764ba210);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+    }
     
     .option-header h3 {
-      color: #3498db;
+      color: #667eea;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
+  }
+  
+  p {
+    color: $text-secondary;
+    margin: 0.5rem 0 1rem 0;
+    line-height: 1.6;
+    font-size: 1rem;
   }
 }
 
 .option-header {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
   
   .icon {
-    font-size: 24px;
-    margin-right: 15px;
+    font-size: 2rem;
+    margin-right: 1rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fd;
+    transition: all 0.3s ease;
   }
   
   h3 {
     margin: 0;
-    font-size: 20px;
-    color: #2c3e50;
+    font-size: 1.4rem;
+    color: $text-primary;
+    font-weight: 600;
   }
 }
 
-.payment-option p {
-  color: #7f8c8d;
-  margin-bottom: 15px;
-}
-
+// Card icons styling
 .card-icons, .bank-icons {
   display: flex;
-  gap: 10px;
+  gap: 0.5rem;
+  flex-wrap: wrap;
   
   span {
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: bold;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: $white;
     
-    &.visa { background: #1a1f71; color: white; }
-    &.mastercard { background: #eb001b; color: white; }
-    &.maestro { background: #0099ff; color: white; }
-    &.nlb { background: #005baa; color: white; }
-    &.skb { background: #e2001a; color: white; }
-    &.abanka { background: #00a650; color: white; }
+    &.visa { 
+      background: linear-gradient(135deg, #1a1f71, #3b4dd1); 
+    }
+    &.mastercard { 
+      background: linear-gradient(135deg, #eb001b, #ff4757); 
+    }
+    &.maestro { 
+      background: linear-gradient(135deg, #0099ff, #48dbfb); 
+    }
+    &.nlb { 
+      background: linear-gradient(135deg, #005baa, #3742fa); 
+    }
+    &.skb { 
+      background: linear-gradient(135deg, #e2001a, #ff3838); 
+    }
+    &.abanka { 
+      background: linear-gradient(135deg, #00a650, #2ed573); 
+    }
   }
 }
 
+// Form styling
 .payment-form {
-  margin-top: 30px;
-  padding: 20px;
-  background: #f8f9fa;
-  border-radius: 10px;
+  background: $white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: $success-gradient;
+  }
   
   h3 {
     margin-top: 0;
-    color: #2c3e50;
+    color: $text-primary;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    
+    &::before {
+      content: '🔒';
+      margin-right: 1rem;
+      font-size: 1.5rem;
+    }
   }
 }
 
 .form-row {
   display: flex;
-  gap: 20px;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
   
   .form-group {
     flex: 1;
@@ -108,77 +236,141 @@ h2 {
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
   
   label {
     display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: $text-primary;
+    font-size: 0.95rem;
   }
   
   input {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
+    padding: 1rem 1.5rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #f8f9fd;
+    box-sizing: border-box;
     
     &:focus {
-      border-color: #3498db;
       outline: none;
-      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+      border-color: #667eea;
+      background: $white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    &::placeholder {
+      color: #a0aec0;
     }
   }
 }
 
+// Bank selection styling
+.bank-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.bank-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1rem;
+  background: #f8f9fd;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  
+  &:hover {
+    background: $white;
+    border-color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+  }
+  
+  &.selected {
+    background: linear-gradient(135deg, #667eea10, #764ba210);
+    border-color: #667eea;
+    color: #667eea;
+    font-weight: 600;
+  }
+  
+  .bank-logo {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  span {
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+}
+
+// Security styling
 .security-note {
   display: flex;
   align-items: center;
-  background: #e8f4fc;
-  padding: 15px;
-  border-radius: 8px;
-  margin: 20px 0;
+  background: linear-gradient(135deg, #e8f4fc, #f0f8ff);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  border: 1px solid #b3d9ff;
   
   .lock-icon {
-    margin-right: 10px;
-    font-size: 20px;
+    margin-right: 1rem;
+    font-size: 1.5rem;
+    color: #3498db;
   }
   
   p {
     margin: 0;
     color: #3498db;
+    font-weight: 500;
   }
 }
 
-.pay-button {
+// Button styling
+.pay-button, .confirm-button {
   width: 100%;
-  padding: 14px;
-  background: #27ae60;
-  color: white;
+  padding: 1rem 2rem;
+  background: $primary-gradient;
+  color: $white;
   border: none;
-  border-radius: 8px;
-  font-size: 18px;
+  border-radius: 12px;
+  font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
   
-  &:hover {
-    background: #219653;
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
   }
   
   &:disabled {
-    background: #95a5a6;
+    opacity: 0.6;
     cursor: not-allowed;
   }
 }
 
+// Confirmation styling
 .payment-confirmation {
-  margin-top: 30px;
-  padding: 30px;
-  background: #f8f9fa;
-  border-radius: 10px;
+  background: $white;
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
   text-align: center;
+  margin-top: 2rem;
   
   .confirmation-content {
     max-width: 400px;
@@ -186,92 +378,116 @@ h2 {
   }
   
   .icon.cash-large {
-    font-size: 48px;
-    margin: 0 auto 20px;
+    font-size: 4rem;
+    margin: 0 auto 1.5rem;
     display: block;
+    color: $success-color;
   }
   
   h3 {
-    color: #27ae60;
-    margin-bottom: 15px;
+    color: $success-color;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
   }
   
   p {
-    color: #7f8c8d;
-    margin-bottom: 10px;
+    color: $text-secondary;
+    margin-bottom: 0.8rem;
+    line-height: 1.6;
     
     strong {
-      color: #2c3e50;
-      font-size: 18px;
+      color: $text-primary;
+      font-size: 1.2rem;
     }
   }
 }
 
-.confirm-button {
-  margin-top: 20px;
-  padding: 12px 30px;
-  background: #27ae60;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s;
-  
-  &:hover {
-    background: #219653;
-  }
-}
-
-.bank-options {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 15px;
-  margin-bottom: 30px;
-}
-
-.bank-option {
-  text-align: center;
-  cursor: pointer;
-  
-  .bank-logo {
-    padding: 15px;
-    background: white;
-    border: 2px solid #ecf0f1;
-    border-radius: 10px;
-    transition: all 0.3s;
-    
-    &.selected {
-      border-color: #3498db;
-      background-color: rgba(52, 152, 219, 0.05);
-      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-    }
-  }
-}
-
+// Bank instructions
 .bank-instructions {
-  background: #e8f4fc;
-  padding: 20px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #e8f4fc, #f0f8ff);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-top: 1.5rem;
+  border: 1px solid #b3d9ff;
   
   h4 {
     margin-top: 0;
     color: #3498db;
+    font-size: 1.2rem;
   }
   
   p {
-    color: #7f8c8d;
+    color: $text-secondary;
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
   }
 }
 
+// Responsive design
 @media (max-width: 768px) {
+  .payment-container {
+    padding: 1rem 0.5rem;
+  }
+  
+  h2 {
+    font-size: 2rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    
+    &::after {
+      right: 1rem;
+      font-size: 1.5rem;
+    }
+  }
+  
+  .payment-options {
+    grid-template-columns: 1fr;
+  }
+  
+  .payment-form {
+    padding: 2rem 1.5rem;
+  }
+  
   .form-row {
     flex-direction: column;
     gap: 0;
   }
   
-  .payment-options {
+  .bank-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 1.8rem;
+    padding: 1rem;
+  }
+  
+  .payment-form {
+    padding: 1.5rem 1rem;
+  }
+  
+  .bank-options {
     grid-template-columns: 1fr;
+  }
+}
+
+// Animations
+@keyframes rainbow {
+  0%, 100% { 
+    background-position: 0% 50%; 
+  }
+  50% { 
+    background-position: 100% 50%; 
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    transform: translateY(-50%) scale(1); 
+  }
+  50% { 
+    transform: translateY(-50%) scale(1.1); 
   }
 }
