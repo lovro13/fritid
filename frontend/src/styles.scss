@@ -14,69 +14,365 @@ body {
 
 
 header {
-  background: $light-blue;
+  background: linear-gradient(135deg, $light-blue 0%, $primary-blue 50%, #1565c0 100%);
   color: white;
-  padding: 1rem 2rem;
+  padding: 1.2rem 2.5rem;
   display: flex;
-  justify-content: space-between; // This distributes: left | center | right
+  justify-content: space-between;
   align-items: center;
+  box-shadow: 0 8px 32px rgba(25, 118, 210, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
 
   // Left section - for future info
   .left-info {
-    flex: 1; // Takes available space
+    flex: 1;
     display: flex;
     align-items: center;
 
-    // Add your left content styles here
     span {
-      font-size: 0.9rem;
-      opacity: 0.9;
+      font-size: 0.95rem;
+      opacity: 0.92;
+      font-weight: 500;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
   }
 
   // Center section - logo/image
   .center-logo {
-    flex: 0 0 auto; // Don't grow or shrink
+    flex: 0 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
 
+    .logo-link {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 15px;
+      padding: 0.5rem;
+      
+      &:hover {
+        transform: scale(1.08) translateY(-2px);
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+    }
+
     img {
-      height: 150px; // Adjust as needed
+      height: 125px;
       width: auto;
+      filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.25));
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 10px;
+      
+      &:hover {
+        filter: drop-shadow(0 8px 25px rgba(0, 0, 0, 0.4)) brightness(1.05);
+      }
     }
 
     h1 {
       margin: 0;
-      font-size: 1.5rem;
-      margin-left: 1rem; // Space between logo and text
+      font-size: 1.6rem;
+      margin-left: 1.2rem;
+      font-weight: 700;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
   }
 
   // Right section - navigation buttons
   nav {
-    flex: 1; // Takes available space
+    flex: 1;
     display: flex;
-    justify-content: flex-end; // Align buttons to the right
+    justify-content: flex-end;
     align-items: center;
+    gap: 1.2rem;
 
     a {
       color: white;
       text-decoration: none;
-      margin-left: 1.5rem;
-      font-weight: 500;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      transition: background 0.3s;
-      background-color: #1976d2;
-      font-size: x-large;
+      font-weight: 600;
+      padding: 0.9rem 1.8rem;
+      border-radius: 30px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(15px);
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      font-size: 1.05rem;
+      position: relative;
+      overflow: hidden;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 
-      &:hover {
-        background: rgba(255, 255, 255, 0.1);
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      &:first-child {
-        margin-left: 0; // Remove left margin from first button
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 30px;
+        border: 1px solid transparent;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05)) border-box;
+        mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+        mask-composite: xor;
+        transition: all 0.4s ease;
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
+        
+        &::before {
+          left: 100%;
+        }
+
+        &::after {
+          border-color: rgba(255, 255, 255, 0.5);
+        }
+      }
+
+      &:active {
+        transform: translateY(-1px) scale(1.01);
+        transition: all 0.1s ease;
+      }
+
+      // Special styling for cart with items
+      &:has-text("Košarica") {
+        position: relative;
+        
+        &::after {
+          content: '';
+          position: absolute;
+          top: -5px;
+          right: -5px;
+          width: 22px;
+          height: 22px;
+          background: linear-gradient(135deg, $accent-orange, #e65100);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.7rem;
+          font-weight: bold;
+          color: white;
+          box-shadow: 0 2px 8px rgba(255, 152, 0, 0.4);
+          animation: pulse 2s infinite;
+        }
+      }
+    }
+
+    // User section styling
+    .user-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 25px;
+      padding: 0.5rem 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+
+      .user-greeting {
+        color: white;
+        font-weight: 500;
+        font-size: 0.95rem;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      }
+
+      .logout-btn {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-weight: 500;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.25);
+          transform: translateY(-2px);
+        }
+
+        .btn-icon {
+          font-size: 1rem;
+        }
+      }
+    }
+
+    .auth-link {
+      color: white !important;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.9rem 1.8rem;
+      border-radius: 30px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background: linear-gradient(135deg, $accent-orange 0%, #e65100 100%);
+      border: 1.5px solid rgba(255, 152, 0, 0.3);
+      font-size: 1.05rem;
+      position: relative;
+      overflow: hidden;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 25px rgba(255, 152, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      &:hover {
+        background: linear-gradient(135deg, #e65100 0%, #bf360c 100%);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 15px 35px rgba(255, 152, 0, 0.4);
+        
+        &::before {
+          left: 100%;
+        }
+      }
+
+      &:active {
+        transform: translateY(-1px) scale(1.01);
+        transition: all 0.1s ease;
+      }
+
+      .btn-icon {
+        font-size: 1.2rem;
+      }
+    }
+  }
+}
+
+// Keyframe animations
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive header design
+@media (max-width: 768px) {
+  header {
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+    gap: 1rem;
+
+    .left-info {
+      order: 3;
+      flex: none;
+      text-align: center;
+    }
+
+    .center-logo {
+      order: 1;
+      margin-bottom: 0.5rem;
+
+      img {
+        height: 100px;
+      }
+
+      h1 {
+        font-size: 1.4rem;
+        margin-left: 0.8rem;
+      }
+    }
+
+    nav {
+      order: 2;
+      flex: none;
+      justify-content: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+
+      a, .auth-link {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.95rem;
+      }
+
+      .user-section {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.5rem;
+
+        .user-greeting {
+          font-size: 0.85rem;
+        }
+
+        .logout-btn {
+          padding: 0.4rem 0.8rem;
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 0.8rem 1rem;
+
+    .center-logo {
+      img {
+        height: 80px;
+      }
+
+      h1 {
+        font-size: 1.2rem;
+        margin-left: 0.5rem;
+      }
+    }
+
+    nav {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+
+      a {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
       }
     }
   }

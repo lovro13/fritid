@@ -1,8 +1,9 @@
 <div class="cart-container">
-    <h2>Vaš nakupovalni voziček</h2>
+    <h2>🛒 Vaš nakupovalni voziček</h2>
     @if (cartItems.length === 0) {
     <div class="empty-cart">
         Vaš nakupovalni voziček je prazen.
+        <br><small>Dodajte izdelke iz naše ponudbe!</small>
     </div>
     } @else {
     <table class="cart-table">
@@ -24,14 +25,14 @@
                 <td>{{item.quantity}}</td>
                 <td>{{item.product.price | number:'1.2-2'}}€</td>
                 <td>{{item.quantity * item.product.price | number:'1.2-2'}}€</td>
-                <td><button class="remove-button" (click)="removeItem(item)">X</button></td>
+                <td><button class="remove-button" (click)="removeItem(item)">✕</button></td>
             </tr>
             }
         </tbody>
     </table>
     <div class="cart-footer">
-        <p class="total">Total: {{total  | currency:'EUR' }}</p>
-        <button [routerLink]="['/checkout']">Checkout</button>
+        <p class="total">{{total | number:'1.2-2'}}€</p>
+        <button [routerLink]="['/checkout']">🚀 Nadaljuj na plačilo</button>
     </div>
     }
 </div>

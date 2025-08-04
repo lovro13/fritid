@@ -1,18 +1,49 @@
-<div class="product-grid">
-    @for (product of products; track product) {
-    <div class="product-card">
-        <div class="image-container">
-            <img [src]="product.imageUrl" [alt]="product.name">
+<!-- Hero Section with Welcome and Sponsors -->
+<div class="hero-section">
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+        <div class="welcome-content">
+            <h1>Dobrodošli v spletni trgovini Fritid</h1>
+            <p class="welcome-text">
+                Odkrijte našo bogato ponudbo kakovostnih steklenic, pokrovčkov in dodatkov za shranjevanje vaših najljubših izdelkov. 
+                Vse naše izdelke skrbno izbiramo z mislijo na kakovost, funkcionalnost in estetiko.
+            </p>
         </div>
-
-        <div class="card-content">
-            <h3>{{ product.name }}</h3>
-            <p class="price">{{ product.price | currency:'EUR'}}</p>
-        </div>
-
-        <button [routerLink]="['product', product.id]">
-            Dodaj v košarico
-        </button>
     </div>
-    }
+
+    <!-- Sponsors Section -->
+    <div class="sponsors-section">
+        <h2>Naši partnerji</h2>
+        <div class="sponsors-container">
+            <div class="sponsor-item">
+                <img src="assets/bene-mali.png" alt="Bene Partner" class="sponsor-logo">
+            </div>
+            <div class="sponsor-item">
+                <img src="assets/kgt_logo.png" alt="KGT Partner" class="sponsor-logo">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Products Section -->
+<div class="products-section">
+    <h2>Naši izdelki</h2>
+    <div class="product-grid">
+        @for (product of products; track product) {
+        <div class="product-card">
+            <div class="image-container">
+                <img [src]="product.imageUrl" [alt]="product.name">
+            </div>
+
+            <div class="card-content">
+                <h3>{{ product.name }}</h3>
+                <p class="price">{{ product.price | number:'1.2-2' }}</p>
+            </div>
+
+            <button [routerLink]="['product', product.id]">
+                Dodaj v košarico
+            </button>
+        </div>
+        }
+    </div>
 </div>

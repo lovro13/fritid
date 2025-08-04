@@ -1,0 +1,217 @@
+<!-- auth.component.html -->
+<div class="auth-container">
+  <div class="auth-card">
+    <!-- Header with logo and title -->
+    <div class="auth-header">
+      <div class="logo-section">
+        <img src="assets/fritid_logo.png" alt="Fritid Logo" class="auth-logo">
+        <h1>{{ isLoginMode ? 'Prijava' : 'Registracija' }}</h1>
+      </div>
+    </div>
+
+    <!-- Mode Toggle Tabs -->
+    <div class="mode-tabs">
+      <button 
+        class="tab-btn" 
+        [class.active]="isLoginMode"
+        (click)="isLoginMode = true">
+        Prijava
+      </button>
+      <button 
+        class="tab-btn" 
+        [class.active]="!isLoginMode"
+        (click)="isLoginMode = false">
+        Registracija
+      </button>
+    </div>
+
+    <!-- Login Form -->
+    <div class="form-container" *ngIf="isLoginMode">
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+        <div class="form-group">
+          <label for="loginEmail">
+            <i class="icon">📧</i>
+            Email naslov
+          </label>
+          <input 
+            type="email" 
+            id="loginEmail"
+            [(ngModel)]="loginData.email"
+            name="loginEmail"
+            required
+            placeholder="vaš@email.com"
+            class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">
+            <i class="icon">🔒</i>
+            Geslo
+          </label>
+          <input 
+            type="password" 
+            id="loginPassword"
+            [(ngModel)]="loginData.password"
+            name="loginPassword"
+            required
+            placeholder="Vnesite geslo"
+            class="form-input">
+        </div>
+
+        <div class="form-actions">
+          <button 
+            type="button" 
+            class="forgot-password-btn"
+            (click)="forgotPassword()">
+            Pozabljeno geslo?
+          </button>
+        </div>
+
+        <button 
+          type="submit" 
+          class="submit-btn"
+          [disabled]="!loginForm.form.valid">
+          <span class="btn-icon">🚀</span>
+          Prijavite se
+        </button>
+      </form>
+    </div>
+
+    <!-- Registration Form -->
+    <div class="form-container" *ngIf="!isLoginMode">
+      <form (ngSubmit)="onRegister()" #registerForm="ngForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">
+              <i class="icon">👤</i>
+              Ime
+            </label>
+            <input 
+              type="text" 
+              id="firstName"
+              [(ngModel)]="registerData.firstName"
+              name="firstName"
+              required
+              placeholder="Vaše ime"
+              class="form-input">
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">
+              <i class="icon">👤</i>
+              Priimek
+            </label>
+            <input 
+              type="text" 
+              id="lastName"
+              [(ngModel)]="registerData.lastName"
+              name="lastName"
+              required
+              placeholder="Vaš priimek"
+              class="form-input">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="registerEmail">
+            <i class="icon">📧</i>
+            Email naslov
+          </label>
+          <input 
+            type="email" 
+            id="registerEmail"
+            [(ngModel)]="registerData.email"
+            name="registerEmail"
+            required
+            placeholder="vaš@email.com"
+            class="form-input">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="registerPassword">
+              <i class="icon">🔒</i>
+              Geslo
+            </label>
+            <input 
+              type="password" 
+              id="registerPassword"
+              [(ngModel)]="registerData.password"
+              name="registerPassword"
+              required
+              minlength="6"
+              placeholder="Najmanj 6 znakov"
+              class="form-input">
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">
+              <i class="icon">🔒</i>
+              Potrdite geslo
+            </label>
+            <input 
+              type="password" 
+              id="confirmPassword"
+              [(ngModel)]="registerData.confirmPassword"
+              name="confirmPassword"
+              required
+              placeholder="Ponovite geslo"
+              class="form-input">
+          </div>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input 
+              type="checkbox" 
+              [(ngModel)]="registerData.agreeToTerms"
+              name="agreeToTerms"
+              required>
+            <span class="checkmark"></span>
+            Strinjam se s <a href="#" class="terms-link">pogoji uporabe</a> in <a href="#" class="terms-link">politiko zasebnosti</a>
+          </label>
+        </div>
+
+        <button 
+          type="submit" 
+          class="submit-btn"
+          [disabled]="!registerForm.form.valid || !registerData.agreeToTerms">
+          <span class="btn-icon">✨</span>
+          Registrirajte se
+        </button>
+      </form>
+    </div>
+
+    <!-- Social Login Options -->
+    <!-- <div class="social-login">
+      <div class="divider">
+        <span>ali</span>
+      </div>
+       -->
+      <!-- <div class="social-buttons">
+        <button class="social-btn google-btn">
+          <span class="social-icon">🔍</span>
+          Nadaljuj z Google
+        </button>
+        
+        <button class="social-btn facebook-btn">
+          <span class="social-icon">📘</span>
+          Nadaljuj s Facebook
+        </button>
+      </div>
+    </div> -->
+
+    <!-- Footer -->
+    <div class="auth-footer">
+      <p>
+        {{ isLoginMode ? 'Nimate računa?' : 'Že imate račun?' }}
+        <button 
+          type="button" 
+          class="switch-mode-btn"
+          (click)="toggleMode()">
+          {{ isLoginMode ? 'Registrirajte se' : 'Prijavite se' }}
+        </button>
+      </p>
+    </div>
+  </div>
+</div>

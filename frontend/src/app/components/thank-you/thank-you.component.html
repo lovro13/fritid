@@ -1,0 +1,50 @@
+<div class="thank-you-container">
+  <div class="thank-you-card">
+    <div class="success-icon">
+      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" stroke="#4CAF50" stroke-width="2" fill="#E8F5E9"/>
+        <path d="m9 12 2 2 4-4" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    
+    <h1 class="thank-you-title">Hvala za vaš nakup!</h1>
+    
+    <div class="thank-you-content">
+      <p class="main-message">
+        Vaše naročilo je bilo uspešno sprejeto in se obdeluje.
+      </p>
+      
+      <div class="order-details">
+        <h3>Kaj sledi?</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <p>Poslali vam bomo potrditev naročila na elektronski naslov</p>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <p>Vaše naročilo pripravimo in zapakujemo</p>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <p>Obvestimo vas o pošiljanju s številko za sledenje</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="contact-info">
+        <p><strong>Imate vprašanja?</strong></p>
+        <p>Pokličite nas na <strong>051 338 710</strong> ali pišite na <strong>info@fritid.si</strong></p>
+      </div>
+    </div>
+    
+    <div class="action-buttons">
+      <button class="btn-primary" (click)="continueShopping()">
+        Nadaljuj z nakupovanjem
+      </button>
+      <a routerLink="/info/2" class="btn-secondary">
+        Pogoji dostave
+      </a>
+    </div>
+  </div>
+</div>

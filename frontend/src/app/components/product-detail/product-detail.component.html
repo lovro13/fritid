@@ -1,32 +1,102 @@
 <!-- product-detail.component.html -->
 @if (product) {
-<div class="product-detail">
-  <h2>{{ product.name }}</h2>
-  <p class="price">{{ product.price}} EUR</p>
+<div class="product-detail-container">
+  <div class="product-detail">
+    <!-- Product Image Section -->
+    <div class="product-image-section">
+      <div class="main-image-container">
+        <img [src]="product.imageUrl" [alt]="product.name" class="main-image">
+        <div class="image-overlay"></div>
+      </div>
+    </div>
 
-  <div class="color-selector">
-    <label>Barva:</label>
-    <select type="string" [ngModel]="selectedColor">
-      @for (color of product.colors; track color) {
-        <option>
-          {{ color }}
-        </option>
-      }
-    </select>
+    <!-- Product Info Section -->
+    <div class="product-info-section">
+      <div class="product-header">
+        <h1 class="product-title">{{ product.name }}</h1>
+        <div class="product-price">
+          <span class="price-amount">{{ product.price | number:'1.2-2' }}</span>
+          <span class="currency">€</span>
+        </div>
+      </div>
+
+      <div class="product-description">
+        <p>Visokokakovostni izdelek iz naše premium kolekcije. Idealen za shranjevanje in organizacijo vaših dragocenih izdelkov.</p>
+      </div>
+
+      <!-- Color Selection -->
+      <div class="option-group">
+        <label class="option-label">
+          <i class="color-icon">🎨</i>
+          Izberi barvo:
+        </label>
+        <div class="color-options">
+          @for (color of product.colors; track color) {
+            <div class="color-option" 
+                 [class.selected]="selectedColor === color"
+                 (click)="selectedColor = color">
+              <div class="color-circle" [style.background-color]="getColorValue(color)"></div>
+              <span class="color-name">{{ color }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Quantity Selection -->
+      <div class="option-group">
+        <label class="option-label">
+          <i class="quantity-icon">📦</i>
+          Količina:
+        </label>
+        <div class="quantity-controls">
+          <button class="quantity-btn" (click)="decreaseQuantity()" [disabled]="selectedQuantity <= 1">
+            -
+          </button>
+          <input 
+            type="number" 
+            min="1" 
+            max="99"
+            [(ngModel)]="selectedQuantity"
+            class="quantity-input"
+          >
+          <button class="quantity-btn" (click)="increaseQuantity()" [disabled]="selectedQuantity >= 99">
+            +
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button (click)="addToCart(product)" class="btn-add-to-cart">
+          <span class="btn-icon">🛒</span>
+          Dodaj v košarico
+        </button>
+        <!-- <button class="btn-wishlist">
+          <span class="btn-icon">♡</span>
+          Dodaj na seznam želja
+        </button> -->
+      </div>
+
+      <!-- Product Features -->
+      <!-- <div class="product-features">
+        <div class="feature-item">
+          <i class="feature-icon">✓</i>
+          <span>Visokokakovostni materiali</span>
+        </div>
+        <div class="feature-item">
+          <i class="feature-icon">🚚</i>
+          <span>Brezplačna dostava nad 50€</span>
+        </div>
+        <div class="feature-item">
+          <i class="feature-icon">↩️</i>
+          <span>30-dnevna garancija vračila</span>
+        </div>
+        <div class="feature-item">
+          <i class="feature-icon">🏆</i>
+          <span>Certificirana kakovost</span>
+        </div>
+      </div> -->
+    </div>
   </div>
-
-  <div class="quantity-selector">
-    <label>Število:</label>
-    <input 
-    type="number" 
-    min="1" 
-    [(ngModel)]="selectedQuantity"
-    >
-  </div>
-
-  <button (click)="addToCart(product)" class="btn-add-to-cart">
-    Dodaj v košarico
-  </button>
-
 </div>
 }

@@ -4,8 +4,8 @@ import { CartService } from '../../service/cart.service';
 import { Product } from '../../service/products.service';
 import { Router, RouterLink } from '@angular/router';
 import { FormModule } from '@coreui/angular';
-import { CurrencyPipe, DecimalPipe } from '@angular/common';
-import { LOCALE_ID } from '@angular/core'; // Add LOCALE_ID import here
+import { DecimalPipe } from '@angular/common';
+import { LOCALE_ID } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 
@@ -17,9 +17,9 @@ registerLocaleData(localeDe);
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
-  imports: [RouterLink, FormModule, CurrencyPipe],
+  imports: [RouterLink, FormModule, DecimalPipe],
   providers: [
-    { provide: LOCALE_ID, useValue: 'de' } // Now LOCALE_ID is properly imported
+    { provide: LOCALE_ID, useValue: 'de' }
   ]
 })
 export class ProductListComponent {

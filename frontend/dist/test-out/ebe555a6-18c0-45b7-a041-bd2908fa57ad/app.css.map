@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/app.scss"],
+  "sourcesContent": [".body-container {\n  padding: 50px;\n  max-width: 1500px;\n  margin: 0 auto;\n\n  @media (max-width: 1200px) {\n    padding: 10px;\n  }\n}\n"],
+  "mappings": ";AAAA,CAAA;AACE,WAAA;AACA,aAAA;AACA,UAAA,EAAA;;AAEA,OAAA,CAAA,SAAA,EAAA;AALF,GAAA;AAMI,aAAA;;;",
+  "names": []
+}
