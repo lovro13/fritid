@@ -48,8 +48,7 @@ export class CheckoutComponent {
     if (this.checkoutForm.valid) {
       this.checkoutService.setPersonInfo(this.checkoutForm.value as PersonInfo);
       console.log('Form Submitted', this.checkoutForm.value);
-      // Add payment processing logic here (e.g., API call)
-      this.router.navigate(['/payment-method']); // Navigate to a thank-you page after success
+      this.router.navigate(['/payment-method']);
     }
   }
 }
