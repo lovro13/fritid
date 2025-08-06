@@ -43,3 +43,16 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Database related files
+*.dump
+*.sql.bak
+/backend/src/main/resources/application.properties
+/backend/src/main/resources/application-local.properties
+
+# PostgreSQL backups
+backup_*.sql
+webstore_backup.*
+
+# Maven target directory
+/backend/target/

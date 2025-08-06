@@ -1,15 +1,16 @@
-spring.application.name=Fritid
+# Fritid Application Configuration Template
+# Copy this to application.properties and update with your actual values
 
 # Database Configuration
-spring.datasource.url=jdbc:postgresql://localhost:5432/${DB_NAME:webstore_db}
-spring.datasource.username=${DB_USER:lovrozs}
-spring.datasource.password=${DB_PASSWORD:Fjordko.123}
+spring.datasource.url=jdbc:postgresql://localhost:5432/your_database_name
+spring.datasource.username=your_username
+spring.datasource.password=your_password
 spring.datasource.driver-class-name=org.postgresql.Driver
 
-# JPA/Hibernate Configuration  
+# JPA/Hibernate Configuration
 spring.jpa.hibernate.ddl-auto=validate
 spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.show-sql=true
+spring.jpa.show-sql=false
 spring.jpa.properties.hibernate.format_sql=true
 
 # Flyway Configuration
@@ -26,5 +27,9 @@ logging.level.com.example.Fritid=DEBUG
 logging.level.org.springframework.web=DEBUG
 logging.level.org.flywaydb=INFO
 
-# CORS Configuration
+# CORS Configuration (update for production)
 cors.allowed-origins=http://localhost:4200
+
+# Application specific settings
+app.name=Fritid Webstore
+app.version=1.0.0
