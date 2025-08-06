@@ -25,6 +25,10 @@ public class OrderItem {
     private BigDecimal price;
     
     // Constructors
+    public OrderItem() {
+        // Default constructor required by JPA
+    }
+    
     public OrderItem(Order order, Product product, Integer quantity, BigDecimal price) {
         this.order = order;
         this.product = product;

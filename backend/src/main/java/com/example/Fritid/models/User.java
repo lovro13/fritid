@@ -30,6 +30,10 @@ public class User {
     private List<Order> orders = new ArrayList<>();
     
     // Constructors
+    public User() {
+        // Default constructor required by JPA
+    }
+    
     public User(String username, String email, String passwordHash) {
         this.username = username;
         this.email = email;

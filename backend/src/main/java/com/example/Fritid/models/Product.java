@@ -2,8 +2,9 @@ package com.example.Fritid.models;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -22,28 +23,46 @@ public class Product {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
     
+    @Column(name = "stock_quantity", nullable = false)
+    private Integer stockQuantity = 0;
+    
+    @Column(length = 100)
+    private String category;
+    
+    @Column(name = "image_url", length = 500)
+    private String imageUrl;
+    
+    @Column(name = "is_active")
+    private Boolean isActive = true;
+    
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
     
-    @Column(name = "available_colors", columnDefinition = "text[]")
-    private String[] availableColors;
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
     
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
     
     // Constructors
+    public Product() {
+        // Default constructor required by JPA
+    }
+    
     public Product(String name, String description, BigDecimal price) {
         this.name = name;
         this.description = description;
         this.price = price;
     }
     
-    public Product(String name, String description, BigDecimal price, String[] availableColors) {
+    public Product(String name, String description, BigDecimal price, Integer stockQuantity, String category) {
         this.name = name;
         this.description = description;
         this.price = price;
-        this.availableColors = availableColors;
+        this.stockQuantity = stockQuantity;
+        this.category = category;
     }
     
     // Getters and Setters
@@ -79,20 +98,52 @@ public class Product {
         this.price = price;
     }
     
-    public OffsetDateTime getCreatedAt() {
+    public Integer getStockQuantity() {
+        return stockQuantity;
+    }
+    
+    public void setStockQuantity(Integer stockQuantity) {
+        this.stockQuantity = stockQuantity;
+    }
+    
+    public String getCategory() {
+        return category;
+    }
+    
+    public void setCategory(String category) {
+        this.category = category;
+    }
+    
+    public String getImageUrl() {
+        return imageUrl;
+    }
+    
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+    
+    public Boolean getIsActive() {
+        return isActive;
+    }
+    
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+    
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
     
-    public void setCreatedAt(OffsetDateTime createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
     
-    public String[] getAvailableColors() {
-        return availableColors;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
     
-    public void setAvailableColors(String[] availableColors) {
-        this.availableColors = availableColors;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
     
     public List<OrderItem> getOrderItems() {
