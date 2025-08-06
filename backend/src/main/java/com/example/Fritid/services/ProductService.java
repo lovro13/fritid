@@ -39,8 +39,8 @@ public class ProductService {
         return productRepository.save(product);
     }
     
-    public Product createProduct(String name, String description, BigDecimal price, String[] availableColors) {
-        Product product = new Product(name, description, price, availableColors);
+    public Product createProduct(String name, String description, BigDecimal price, Integer stockQuantity, String category) {
+        Product product = new Product(name, description, price, stockQuantity, category);
         return productRepository.save(product);
     }
     
@@ -51,7 +51,10 @@ public class ProductService {
             product.setName(updatedProduct.getName());
             product.setDescription(updatedProduct.getDescription());
             product.setPrice(updatedProduct.getPrice());
-            product.setAvailableColors(updatedProduct.getAvailableColors());
+            product.setStockQuantity(updatedProduct.getStockQuantity());
+            product.setCategory(updatedProduct.getCategory());
+            product.setImageUrl(updatedProduct.getImageUrl());
+            product.setIsActive(updatedProduct.getIsActive());
             return productRepository.save(product);
         }
         throw new RuntimeException("Product not found with id: " + id);
