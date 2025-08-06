@@ -129,6 +129,58 @@ cd backend/db
 psql -U fritid_user -d fritid_db
 ```
 
+### Database Version Control
+
+This project uses **Flyway** for database version control:
+
+- **Migrations**: Located in `backend/src/main/resources/db/migration/`
+- **Automatic**: Migrations run automatically on application startup
+- **Versioned**: Each migration has a version number (V1, V2, etc.)
+- **Portable**: Database schema is version controlled with Git
+
+#### Creating New Migrations
+
+1. **Create migration file**:
+   ```bash
+   touch backend/src/main/resources/db/migration/V2__Add_new_feature.sql
+   ```
+
+2. **Add SQL changes**:
+   ```sql
+   -- V2__Add_new_feature.sql
+   ALTER TABLE products ADD COLUMN featured BOOLEAN DEFAULT FALSE;
+   CREATE INDEX idx_products_featured ON products(featured);
+   ```
+
+3. **Restart application** - Flyway will run the migration automatically
+
+#### Migration Best Practices
+
+- ✅ **Never modify existing migrations** - create new ones
+- ✅ **Use descriptive names** - `V2__Add_product_categories.sql`
+- ✅ **Test on development data** before production
+- ✅ **Include rollback comments** for complex changes
+
+#### Database Setup for New Developers
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/lovro13/fritid.git
+   cd fritid
+   ```
+
+2. **Run setup script**:
+   ```bash
+   cd backend/db && ./setup-database.sh
+   ```
+
+3. **Start application**:
+   ```bash
+   cd .. && mvn spring-boot:run
+   ```
+
+Flyway automatically creates the database schema from migrations.
+
 ## 📦 API Documentation
 
 The API follows RESTful conventions with JSON responses:
