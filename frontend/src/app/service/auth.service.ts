@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -13,7 +14,7 @@ export class AuthService {
   private userSubject = new BehaviorSubject<User | null>(null);
   public user$ = this.userSubject.asObservable();
 
-  constructor() {
+  constructor(private http: HttpClient) {
     // Check if user is already logged in from localStorage
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
@@ -31,7 +32,6 @@ export class AuthService {
 
   login(email: string, password: string): boolean {
     // TODO: Implement actual authentication with backend
-    // For now, mock successful login
     const user: User = {
       email: email,
       name: 'Uporabnik'
@@ -42,17 +42,22 @@ export class AuthService {
     return true;
   }
 
-  register(userData: any): boolean {
-    // TODO: Implement actual registration with backend
-    // For now, mock successful registration
-    const user: User = {
+  register(userData: any): Observable<any> {
+    // Send registration data to backend
+    const registrationRequest = {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
       email: userData.email,
-      name: `${userData.firstName} ${userData.lastName}`
+      password: userData.password,
+      confirmPassword: userData.confirmPassword
     };
-    
-    localStorage.setItem('user', JSON.stringify(user));
-    this.userSubject.next(user);
-    return true;
+    console.log('Registration request:', registrationRequest);
+    // Assuming HttpClient is injected in the constructor
+    let response = this.http.post('http://localhost:8080/api/account/register', registrationRequest);
+    response.subscribe(res => {
+      console.log('Registration response:', res);
+    });
+    return response;
   }
 
   logout(): void {

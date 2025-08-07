@@ -32,7 +32,7 @@ public class UserController {
     
     @GetMapping("/username/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
-        Optional<User> user = userService.getUserByUsername(username);
+        Optional<User> user = userService.getUserByEmail(username);
         return user.map(ResponseEntity::ok)
                   .orElse(ResponseEntity.notFound().build());
     }
@@ -48,8 +48,9 @@ public class UserController {
     public ResponseEntity<?> createUser(@RequestBody User user) {
         try {
             User createdUser = userService.createUser(
-                user.getUsername(), 
-                user.getEmail(), 
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
                 user.getPasswordHash()
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
@@ -63,7 +64,8 @@ public class UserController {
         Optional<User> userOpt = userService.getUserById(id);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
-            user.setUsername(userDetails.getUsername());
+            user.setFirstName(userDetails.getFirstName());
+            user.setLastName(userDetails.getLastName());
             user.setEmail(userDetails.getEmail());
             if (userDetails.getPasswordHash() != null) {
                 user.setPasswordHash(userDetails.getPasswordHash());
@@ -82,13 +84,7 @@ public class UserController {
         }
         return ResponseEntity.notFound().build();
     }
-    
-    @GetMapping("/exists/username/{username}")
-    public ResponseEntity<Boolean> checkUsernameExists(@PathVariable String username) {
-        boolean exists = userService.existsByUsername(username);
-        return ResponseEntity.ok(exists);
-    }
-    
+        
     @GetMapping("/exists/email/{email}")
     public ResponseEntity<Boolean> checkEmailExists(@PathVariable String email) {
         boolean exists = userService.existsByEmail(email);

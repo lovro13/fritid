@@ -5,7 +5,7 @@ import { CheckoutService } from '../../service/checkout.service';
 import { CartService } from '../../service/cart.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { combineLatest } from 'rxjs';
+import { combineLatest, take } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -75,13 +75,15 @@ export class PaymentMethodComponent {
     combineLatest([
       this.checkoutService.personInfo$,
       this.cartService.cartItems$
-    ]).subscribe(([personInfo, cartItems]) => {
+    ])
+    .pipe(take(1))
+    .subscribe(([personInfo, cartItems]) => {
       const payload = {
         personInfo,
         cartItems
       };
 
-      this.http.post('/api/checkout', payload).subscribe({
+      this.http.post('http://localhost:8080/api/checkout', payload).subscribe({
         next: (response) => {
           console.log('Checkout success', response);
           this.router.navigate(['/thank-you']);

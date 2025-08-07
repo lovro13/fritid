@@ -18,11 +18,11 @@ public class OrderItem {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
     
-    @Column(nullable = false)
-    private Integer quantity;
-    
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
+    
+    @Column(nullable = false)
+    private Integer quantity;
     
     // Constructors
     public OrderItem() {
