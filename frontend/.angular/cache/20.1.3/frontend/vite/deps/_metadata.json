@@ -1,67 +1,67 @@
 {
-  "hash": "5d07ae40",
-  "configHash": "e4749089",
-  "lockfileHash": "f082a80a",
-  "browserHash": "387a569d",
+  "hash": "60361ee8",
+  "configHash": "50e0bf6e",
+  "lockfileHash": "e981d7ee",
+  "browserHash": "3e56a1db",
   "optimized": {
     "@angular/common": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/common.mjs",
       "file": "@angular_common.js",
-      "fileHash": "19ad4282",
+      "fileHash": "be3defd3",
       "needsInterop": false
     },
     "@angular/common/http": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/http.mjs",
       "file": "@angular_common_http.js",
-      "fileHash": "1b4b3085",
+      "fileHash": "c3324103",
       "needsInterop": false
     },
     "@angular/common/locales/de": {
       "src": "../../../../../../node_modules/@angular/common/locales/de.js",
       "file": "@angular_common_locales_de.js",
-      "fileHash": "7c414910",
+      "fileHash": "dd23b986",
       "needsInterop": false
     },
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "137f2a38",
+      "fileHash": "bee4f591",
       "needsInterop": false
     },
     "@angular/forms": {
       "src": "../../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
       "file": "@angular_forms.js",
-      "fileHash": "69eed571",
+      "fileHash": "203f2f84",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "dc9880a3",
+      "fileHash": "0d4843e1",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "bb0037d8",
+      "fileHash": "e98b7ae7",
       "needsInterop": false
     },
     "@coreui/angular": {
       "src": "../../../../../../node_modules/@coreui/angular/fesm2022/coreui-angular.mjs",
       "file": "@coreui_angular.js",
-      "fileHash": "b03128bb",
+      "fileHash": "0c481e14",
       "needsInterop": false
     },
     "rxjs": {
       "src": "../../../../../../node_modules/rxjs/dist/esm5/index.js",
       "file": "rxjs.js",
-      "fileHash": "f3509c70",
+      "fileHash": "4fb00222",
       "needsInterop": false
     },
     "zone.js": {
       "src": "../../../../../../node_modules/zone.js/fesm2015/zone.js",
       "file": "zone__js.js",
-      "fileHash": "bd6ea7e5",
+      "fileHash": "7548d67b",
       "needsInterop": true
     }
   },

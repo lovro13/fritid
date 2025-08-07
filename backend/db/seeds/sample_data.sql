@@ -3,9 +3,9 @@
 
 -- Sample users (passwords are hashed versions of 'password123')
 INSERT INTO users (username, email, password_hash, name, address, postal_code, city, country, phone_number) VALUES
-('john_doe', 'john.doe@example.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'John Doe', '123 Main St', '10001', 'New York', 'USA', '+1-555-0123'),
-('jane_smith', 'jane.smith@example.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Jane Smith', '456 Oak Ave', '90210', 'Beverly Hills', 'USA', '+1-555-0456'),
-('bob_wilson', 'bob.wilson@example.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Bob Wilson', '789 Pine Rd', 'SW1A 1AA', 'London', 'UK', '+44-20-7946-0958');
+('tets_user1', 'john.doe@example.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'John Doe', '123 Main St', '10001', 'New York', 'USA', '+1-555-0123'),
+('test_user2', 'jane.smith@example.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Jane Smith', '456 Oak Ave', '90210', 'Beverly Hills', 'USA', '+1-555-0456'),
+('test_user3', 'bob.wilson@example.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Bob Wilson', '789 Pine Rd', 'SW1A 1AA', 'London', 'UK', '+44-20-7946-0958');
 
 -- Sample products based on your assets
 INSERT INTO products (name, description, price, stock_quantity, category, image_url) VALUES

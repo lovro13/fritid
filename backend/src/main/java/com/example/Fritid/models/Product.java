@@ -2,7 +2,6 @@ package com.example.Fritid.models;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,31 +16,30 @@ public class Product {
     @Column(nullable = false)
     private String name;
     
-    @Column(columnDefinition = "TEXT")
-    private String description;
-    
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
+    
+    @Column(name = "image_url", length = 500, nullable = false)
+    private String imageUrl;
+
+    @Column(name = "colors", columnDefinition = "TEXT[]", nullable = false)
+    private String[] colors = new String[0];
+
+    @Column(length = 100)
+    private String category;
     
     @Column(name = "stock_quantity", nullable = false)
     private Integer stockQuantity = 0;
     
-    @Column(length = 100)
-    private String category;
-    
-    @Column(name = "image_url", length = 500)
-    private String imageUrl;
-    
     @Column(name = "is_active")
     private Boolean isActive = true;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
     
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
     
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
@@ -136,14 +134,6 @@ public class Product {
     
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-    
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-    
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
     
     public List<OrderItem> getOrderItems() {

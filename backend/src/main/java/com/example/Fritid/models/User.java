@@ -12,10 +12,13 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "first_name", nullable = false, length = 255)
+    private String firstName;
     
-    @Column(unique = true, nullable = false)
-    private String username;
-    
+    @Column(name = "last_name", nullable = false, length = 255)
+    private String lastName;
+
     @Column(unique = true, nullable = false)
     private String email;
     
@@ -26,6 +29,22 @@ public class User {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
     
+    // Profile fields from database schema
+    @Column(name = "address")
+    private String address;
+    
+    @Column(name = "postal_code")
+    private String postalCode;
+    
+    @Column(name = "city")
+    private String city;
+    
+    @Column(name = "country")
+    private String country;
+    
+    @Column(name = "phone_number")
+    private String phoneNumber;
+    
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
     
@@ -33,9 +52,15 @@ public class User {
     public User() {
         // Default constructor required by JPA
     }
+
+    public User(String email, String passwordHash) {
+        this.email = email;
+        this.passwordHash = passwordHash;
+    }
     
-    public User(String username, String email, String passwordHash) {
-        this.username = username;
+    public User(String firstName, String lastName, String email, String passwordHash) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.passwordHash = passwordHash;
     }
@@ -49,14 +74,22 @@ public class User {
         this.id = id;
     }
     
-    public String getUsername() {
-        return username;
+    public String getFirstName() {
+        return firstName;
     }
     
-    public void setUsername(String username) {
-        this.username = username;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
     
+    public String getLastName() {
+        return lastName;
+    }
+    
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+       
     public String getEmail() {
         return email;
     }
@@ -87,5 +120,46 @@ public class User {
     
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+    
+    // Profile field getters and setters
+    public String getAddress() {
+        return address;
+    }
+    
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    
+    public String getPostalCode() {
+        return postalCode;
+    }
+    
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+    
+    public String getCity() {
+        return city;
+    }
+    
+    public void setCity(String city) {
+        this.city = city;
+    }
+    
+    public String getCountry() {
+        return country;
+    }
+    
+    public void setCountry(String country) {
+        this.country = country;
+    }
+    
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

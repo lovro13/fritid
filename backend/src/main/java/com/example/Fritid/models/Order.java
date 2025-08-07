@@ -14,10 +14,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = true)
-    private User user;
-    
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;
     
@@ -29,43 +25,37 @@ public class Order {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
     
-    // Guest order information
-    @Column(name = "guest_email")
-    private String guestEmail;
-    
-    @Column(name = "guest_name")
-    private String guestName;
-    
-    @Column(name = "guest_phone")
-    private String guestPhone;
-    
-    @Column(name = "is_guest_order")
-    private Boolean isGuestOrder = false;
-    
     // Shipping details
-    @Column(name = "shipping_name")
-    private String shippingName;
+    @Column(name = "shipping_first_name", nullable = false)
+    private String shippingFirstName;
+
+    @Column(name = "shipping_last_name", nullable = false)
+    private String shippingLastName;
     
-    @Column(name = "shipping_address", columnDefinition = "TEXT")
+    @Column(name = "shipping_email", nullable = false)
+    private String shippingEmail;
+
+    @Column(name = "shipping_address", columnDefinition = "TEXT", nullable = false)
     private String shippingAddress;
     
-    @Column(name = "shipping_postal_code")
+    @Column(name = "shipping_postal_code", nullable = false)
     private String shippingPostalCode;
     
-    @Column(name = "shipping_city")
+    @Column(name = "shipping_city", nullable = false)
     private String shippingCity;
     
-    @Column(name = "shipping_country")
+    @Column(name = "shipping_country", nullable = false)
     private String shippingCountry;
     
-    @Column(name = "shipping_phone_number")
+    @Column(name = "shipping_phone_number", nullable = false)
     private String shippingPhoneNumber;
-    
-    @Column(name = "use_different_shipping")
-    private Boolean useDifferentShipping = false;
     
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderItem> orderItems = new ArrayList<>();
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = true)
+    private User user;
     
     // Enum for order status
     public enum OrderStatus {
@@ -130,5 +120,70 @@ public class Order {
     
     public void setOrderItems(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
+    }
+    
+    // Shipping field getters and setters
+    public String getShippingFirstName() {
+        return shippingFirstName;
+    }
+    
+    public void setShippingFirstName(String shippingFirstName) {
+        this.shippingFirstName = shippingFirstName;
+    }
+    
+    public String getShippingLastName() {
+        return shippingLastName;
+    }
+    
+    public void setShippingLastName(String shippingLastName) {
+        this.shippingLastName = shippingLastName;
+    }
+    
+    public String getShippingEmail() {
+        return shippingEmail;
+    }
+    
+    public void setShippingEmail(String shippingEmail) {
+        this.shippingEmail = shippingEmail;
+    }
+    
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+    
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+    
+    public String getShippingPostalCode() {
+        return shippingPostalCode;
+    }
+    
+    public void setShippingPostalCode(String shippingPostalCode) {
+        this.shippingPostalCode = shippingPostalCode;
+    }
+    
+    public String getShippingCity() {
+        return shippingCity;
+    }
+    
+    public void setShippingCity(String shippingCity) {
+        this.shippingCity = shippingCity;
+    }
+    
+    public String getShippingCountry() {
+        return shippingCountry;
+    }
+    
+    public void setShippingCountry(String shippingCountry) {
+        this.shippingCountry = shippingCountry;
+    }
+    
+    public String getShippingPhoneNumber() {
+        return shippingPhoneNumber;
+    }
+    
+    public void setShippingPhoneNumber(String shippingPhoneNumber) {
+        this.shippingPhoneNumber = shippingPhoneNumber;
     }
 }
