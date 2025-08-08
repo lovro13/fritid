@@ -3,16 +3,23 @@ package com.example.Fritid.controllers;
 import com.example.Fritid.dto.CheckoutRequest;
 import com.example.Fritid.dto.PersonInfo;
 import com.example.Fritid.dto.CartItem;
+import com.example.Fritid.models.User;
+import com.example.Fritid.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:4200")
 public class CheckoutController {
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/checkout")
     public ResponseEntity<Map<String, Object>> processCheckout(@RequestBody CheckoutRequest checkoutData) {
@@ -43,6 +50,28 @@ public class CheckoutController {
         System.out.println("Customer Email: " + personInfo.getEmail());
         System.out.println("Shipping Address: " + personInfo.getAddress());
         System.out.println("Number of items: " + cartItems.length);
+        
+        // Save user address data if user is logged in
+        Integer userId = checkoutData.getUserId();
+        System.out.println("User ID: " + userId);
+        if (userId != null) {
+            Optional<User> userOpt = userService.getUserById(userId);
+            System.out.println("User Opt: " + userOpt);
+            if (userOpt.isPresent()) {
+                User user = userOpt.get();
+                
+                // Update user address information
+                user.setAddress(personInfo.getAddress());
+                user.setPostalCode(personInfo.getPostalCode());
+                user.setCity(personInfo.getCity());
+                user.setCountry(personInfo.getCountry());
+                user.setPhoneNumber(personInfo.getPhoneNumber());
+                
+                // Save updated user
+                userService.saveUser(user);
+                System.out.println("Updated user address data for user ID: " + userId);
+            }
+        }
         
         // Calculate total amount
         BigDecimal totalAmount = BigDecimal.ZERO;

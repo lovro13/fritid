@@ -13,6 +13,13 @@ import { AuthService } from '../../service/auth.service';
 export class AuthComponent {
   isLoginMode = true;
   
+  // Message flags
+  loginSuccess = false;
+  loginError = false;
+  registrationSuccess = false;
+  registrationError = false;
+  messageText = '';
+  
   // Login form data
   loginData = {
     email: '',
@@ -49,33 +56,71 @@ export class AuthComponent {
       confirmPassword: '',
       agreeToTerms: false
     };
+    // Clear all message flags
+    this.clearMessages();
+  }
+
+  clearMessages() {
+    this.loginSuccess = false;
+    this.loginError = false;
+    this.registrationSuccess = false;
+    this.registrationError = false;
+    this.messageText = '';
   }
 
   onLogin() {
+    this.clearMessages();
+    
     if (this.loginData.email && this.loginData.password) {
-      const success = this.authService.login(this.loginData.email, this.loginData.password);
-      
-      if (success) {
-        alert('Uspešno ste se prijavili!');
-        this.router.navigate(['/']);
-      } else {
-        alert('Napačen email ali geslo.');
-      }
+      this.authService.login(this.loginData.email, this.loginData.password)
+        .subscribe(res => {
+          if (res.success) {
+            this.loginSuccess = true;
+            this.messageText = 'Uspešno ste se prijavili! Preusmerjamo vas...';
+            
+            // Redirect after a short delay to show the success message
+            setTimeout(() => {
+              this.router.navigate(['/']);
+            }, 1500);
+          } else {
+            this.loginError = true;
+            this.messageText = res.message || 'Napačen email ali geslo.';
+          }
+        }, err => {
+          this.loginError = true;
+          this.messageText = 'Napaka pri prijavi. Poskusite znova.';
+        });
     } else {
-      alert('Prosimo, izpolnite vsa polja.');
+      this.loginError = true;
+      this.messageText = 'Prosimo, izpolnite vsa polja.';
     }
   }
 
   onRegister() {
+    this.clearMessages();
+    
     if (this.validateRegistration()) {
-      const success = this.authService.register(this.registerData);
-      
-      if (success) {
-        alert('Uspešno ste se registrirali!');
-        this.router.navigate(['/']);
-      } else {
-        alert('Napaka pri registraciji. Poskusite znova.');
-      }
+      this.authService.register(this.registerData).subscribe(
+        res => {
+          if (res.success) {
+            this.registrationSuccess = true;
+            this.messageText = 'Uspešno ste se registrirali! Preusmerjamo vas na prijavo...';
+            
+            // Switch to login mode after a short delay
+            setTimeout(() => {
+              this.isLoginMode = true;
+              this.clearForms();
+            }, 2000);
+          } else {
+            this.registrationError = true;
+            this.messageText = res.message || 'Napaka pri registraciji. Poskusite znova.';
+          }
+        },
+        err => {
+          this.registrationError = true;
+          this.messageText = 'Napaka pri registraciji. Poskusite znova.';
+        }
+      );
     }
   }
 
@@ -83,22 +128,26 @@ export class AuthComponent {
     if (!this.registerData.firstName || !this.registerData.lastName || 
         !this.registerData.email || !this.registerData.password || 
         !this.registerData.confirmPassword) {
-      alert('Prosimo, izpolnite vsa polja.');
+      this.registrationError = true;
+      this.messageText = 'Prosimo, izpolnite vsa polja.';
       return false;
     }
 
     if (this.registerData.password !== this.registerData.confirmPassword) {
-      alert('Gesli se ne ujemata.');
+      this.registrationError = true;
+      this.messageText = 'Gesli se ne ujemata.';
       return false;
     }
 
     if (this.registerData.password.length < 6) {
-      alert('Geslo mora imeti vsaj 6 znakov.');
+      this.registrationError = true;
+      this.messageText = 'Geslo mora imeti vsaj 6 znakov.';
       return false;
     }
 
     if (!this.registerData.agreeToTerms) {
-      alert('Morate se strinjati s pogoji uporabe.');
+      this.registrationError = true;
+      this.messageText = 'Morate se strinjati s pogoji uporabe.';
       return false;
     }
 

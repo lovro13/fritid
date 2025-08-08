@@ -178,36 +178,82 @@ header {
     .user-section {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 25px;
-      padding: 0.5rem 1rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      gap: 1.2rem;
 
       .user-greeting {
         color: white;
-        font-weight: 500;
-        font-size: 0.95rem;
+        font-weight: 600;
+        font-size: 1.05rem;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        padding: 0.9rem 1.8rem;
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(15px);
+        border: 1.5px solid rgba(255, 255, 255, 0.25);
+        border-radius: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       }
 
       .logout-btn {
-        background: rgba(255, 255, 255, 0.15);
         color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        font-size: 0.9rem;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 0.9rem 1.8rem;
+        border-radius: 30px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(15px);
+        border: 1.5px solid rgba(255, 255, 255, 0.25);
+        font-size: 1.05rem;
+        position: relative;
+        overflow: hidden;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         cursor: pointer;
-        transition: all 0.3s ease;
         display: flex;
         align-items: center;
-        gap: 0.3rem;
-        font-weight: 500;
+        gap: 0.5rem;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+          transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 30px;
+          border: 1px solid transparent;
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05)) border-box;
+          mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+          mask-composite: xor;
+          transition: all 0.4s ease;
+        }
 
         &:hover {
           background: rgba(255, 255, 255, 0.25);
-          transform: translateY(-2px);
+          transform: translateY(-3px) scale(1.02);
+          box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+          border-color: rgba(255, 255, 255, 0.4);
+          
+          &::before {
+            left: 100%;
+          }
+
+          &::after {
+            border-color: rgba(255, 255, 255, 0.5);
+          }
+        }
+
+        &:active {
+          transform: translateY(-1px) scale(1.01);
+          transition: all 0.1s ease;
         }
 
         .btn-icon {

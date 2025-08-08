@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { CheckoutService, PersonInfo } from '../../service/checkout.service';
+import { AuthService } from '../../service/auth.service';
 
 // ime
 // priimek
@@ -28,7 +29,8 @@ export class CheckoutComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private checkoutService: CheckoutService // Inject service
+    private checkoutService: CheckoutService, // Inject service
+    private authService: AuthService
   ) {
     this.checkoutForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
@@ -42,7 +44,29 @@ export class CheckoutComponent {
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    // Auto-fill user data if logged in
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser && currentUser.id) {
+      this.authService.getUserById(currentUser.id).subscribe(
+        (user) => {
+          // Auto-fill form with user data
+          this.checkoutForm.patchValue({
+            firstName: user.firstName || '',
+            lastName: user.lastName || '',
+            email: user.email || '',
+            address: user.address || '',
+            postalCode: user.postalCode || '',
+            city: user.city || '',
+            phone: user.phoneNumber || ''
+          });
+        },
+        (error) => {
+          console.error('Failed to fetch user details:', error);
+        }
+      );
+    }
+  }
 
   onSubmit() {
     if (this.checkoutForm.valid) {

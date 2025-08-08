@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.example.Fritid.dto.RegistrationRequest;
+import com.example.Fritid.dto.LoginRequest;
 import com.example.Fritid.services.UserService;
 
 @RestController
@@ -85,12 +86,12 @@ public class AccountController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> loginData) {
+	public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest loginData) {
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
-			String email = loginData.get("email");
-			String password = loginData.get("password");
+			String email = loginData.getEmail();
+			String password = loginData.getPassword();
 			
 			if (email == null || email.trim().isEmpty()) {
 				response.put("success", false);

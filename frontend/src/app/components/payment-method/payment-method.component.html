@@ -26,21 +26,6 @@
       <p>Plačilo v gotovini ob prevzemu paketa</p>
     </div>
 
-    <!-- Online Banking -->
-    <div class="payment-option" [class.selected]="selectedMethod === 'bank'" (click)="selectMethod('bank')">
-      <div class="option-header">
-        <i class="icon bank"></i>
-        <h3>Spletna banka</h3>
-      </div>
-      <p>Plačilo preko spletne banke</p>
-      <div class="bank-icons">
-        <i class="nlb"></i>
-        <i class="skb"></i>
-        <i class="abanka"></i>
-      </div>
-    </div>
-  </div>
-
   <!-- Card Payment Form -->
   @if (selectedMethod === 'card') {
   <div class="payment-form">
@@ -91,36 +76,6 @@
       <p>Skupni znesek: <strong>{{ total | currency:'EUR' }}</strong></p>
       <button class="confirm-button" (click)="confirmCashPayment()">Potrdi naročilo</button>
     </div>
-  </div>
-  }
-
-  <!-- Online Banking Form -->
-  @if (selectedMethod === 'bank') {
-
-  <div class="payment-form">
-    <h3>Izberite svojo banko</h3>
-
-    <div class="bank-options">
-      @for (bank of banks; track bank) {
-      <div class="bank-option" (click)="selectBank(bank)">
-        <div class="bank-logo" [class.selected]="selectedBank === bank">
-          <img [src]="'assets/banks/' + bank + '.png'" [alt]="bank">
-        </div>
-        <p>{{ getBankName(bank) }}</p>
-      </div>
-      }
-    </div>
-    @if (selectedBank) {
-      <div class="bank-instructions">
-        <h4>Navodila za plačilo</h4>
-        <p>Po kliku na gumb boste preusmerjeni na spletno stran {{ getBankName(selectedBank) }}.</p>
-        <p>Tam se boste prijavili in potrdili plačilo.</p>
-        
-        <button class="pay-button" (click)="processBankPayment()">
-          Nadaljuj na {{ getBankName(selectedBank) }}
-        </button>
-      </div>
-    }
   </div>
   }
 </div>
