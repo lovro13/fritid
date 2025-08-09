@@ -14,15 +14,27 @@
       <button 
         class="tab-btn" 
         [class.active]="isLoginMode"
-        (click)="isLoginMode = true">
+        (click)="isLoginMode = true; clearMessages()">
         Prijava
       </button>
       <button 
         class="tab-btn" 
         [class.active]="!isLoginMode"
-        (click)="isLoginMode = false">
+        (click)="isLoginMode = false; clearMessages()">
         Registracija
       </button>
+    </div>
+
+    <!-- Message Display -->
+    <div class="message-container" *ngIf="messageText">
+      <div class="message success-message" *ngIf="loginSuccess || registrationSuccess">
+        <span class="message-icon">✅</span>
+        {{ messageText }}
+      </div>
+      <div class="message error-message" *ngIf="loginError || registrationError">
+        <span class="message-icon">❌</span>
+        {{ messageText }}
+      </div>
     </div>
 
     <!-- Login Form -->

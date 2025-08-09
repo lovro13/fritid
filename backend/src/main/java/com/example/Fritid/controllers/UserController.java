@@ -90,4 +90,31 @@ public class UserController {
         boolean exists = userService.existsByEmail(email);
         return ResponseEntity.ok(exists);
     }
+    
+    @PutMapping("/{id}/profile")
+    public ResponseEntity<User> updateUserProfile(@PathVariable Integer id, @RequestBody User userProfile) {
+        Optional<User> userOpt = userService.getUserById(id);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            
+            // Update profile fields (address, phone, etc.)
+            if (userProfile.getAddress() != null) {
+                user.setAddress(userProfile.getAddress());
+            }
+            if (userProfile.getPostalCode() != null) {
+                user.setPostalCode(userProfile.getPostalCode());
+            }
+            if (userProfile.getCity() != null) {
+                user.setCity(userProfile.getCity());
+            }
+
+            if (userProfile.getPhoneNumber() != null) {
+                user.setPhoneNumber(userProfile.getPhoneNumber());
+            }
+            
+            User updatedUser = userService.saveUser(user);
+            return ResponseEntity.ok(updatedUser);
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

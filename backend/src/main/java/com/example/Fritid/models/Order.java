@@ -43,10 +43,7 @@ public class Order {
     
     @Column(name = "shipping_city", nullable = false)
     private String shippingCity;
-    
-    @Column(name = "shipping_country", nullable = false)
-    private String shippingCountry;
-    
+   
     @Column(name = "shipping_phone_number", nullable = false)
     private String shippingPhoneNumber;
     
@@ -169,14 +166,6 @@ public class Order {
     
     public void setShippingCity(String shippingCity) {
         this.shippingCity = shippingCity;
-    }
-    
-    public String getShippingCountry() {
-        return shippingCountry;
-    }
-    
-    public void setShippingCountry(String shippingCountry) {
-        this.shippingCountry = shippingCountry;
     }
     
     public String getShippingPhoneNumber() {

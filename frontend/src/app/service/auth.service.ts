@@ -1,10 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 export interface User {
+  id: number;
   email: string;
+  firstName: string;
+  lastName: string;
   name: string;
+  address?: string;
+  postalCode?: string;
+  city?: string;
+  country?: string;
+  phoneNumber?: string;
 }
 
 @Injectable({
@@ -30,16 +39,26 @@ export class AuthService {
     return this.userSubject.value;
   }
 
-  login(email: string, password: string): boolean {
-    // TODO: Implement actual authentication with backend
-    const user: User = {
-      email: email,
-      name: 'Uporabnik'
-    };
-    
-    localStorage.setItem('user', JSON.stringify(user));
-    this.userSubject.next(user);
-    return true;
+  login(email: string, password: string): Observable<{ success: boolean; message: string; user?: any }> {
+    // Send login request to backend
+    return this.http.post<{ success: boolean; message: string; user?: any }>(
+      'http://localhost:8080/api/account/login',
+      { email, password }
+    ).pipe(
+      tap(res => {
+        if (res.success && res.user) {
+          const user: User = {
+            id: res.user.id,
+            email: res.user.email,
+            firstName: res.user.firstName,
+            lastName: res.user.lastName,
+            name: `${res.user.firstName} ${res.user.lastName}`
+          };
+          localStorage.setItem('user', JSON.stringify(user));
+          this.userSubject.next(user);
+        }
+      })
+    );
   }
 
   register(userData: any): Observable<any> {
@@ -52,12 +71,16 @@ export class AuthService {
       confirmPassword: userData.confirmPassword
     };
     console.log('Registration request:', registrationRequest);
-    // Assuming HttpClient is injected in the constructor
-    let response = this.http.post('http://localhost:8080/api/account/register', registrationRequest);
-    response.subscribe(res => {
-      console.log('Registration response:', res);
-    });
-    return response;
+    
+    return this.http.post('http://localhost:8080/api/account/register', registrationRequest);
+  }
+
+  getUserById(id: number): Observable<User> {
+    return this.http.get<User>(`http://localhost:8080/api/users/${id}`);
+  }
+
+  updateUserProfile(id: number, profileData: Partial<User>): Observable<User> {
+    return this.http.put<User>(`http://localhost:8080/api/users/${id}/profile`, profileData);
   }
 
   logout(): void {
