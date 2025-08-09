@@ -48,6 +48,7 @@ export class CartService {
     }
     this.cartItemsSubject.next(currentItems);
     this.saveCart();
+    console.log("Item added to cart:", product, quantity, selectedColor);
   }
 
   removeItemFromCart(item: CartItem) {

@@ -2,83 +2,67 @@ package com.example.Fritid.dto;
 
 import java.math.BigDecimal;
 
+import com.example.Fritid.models.Product;
+
 public class CartItem {
-    private Integer productId;
-    private String productName;
-    private BigDecimal price;
+    private Product product;
     private Integer quantity;
-    private String imageUrl;
-    
+    private String selectedColor;
+
     // Default constructor
     public CartItem() {}
-    
-    // Constructor with parameters
-    public CartItem(Integer productId, String productName, BigDecimal price, 
-                   Integer quantity, String imageUrl) {
-        this.productId = productId;
-        this.productName = productName;
-        this.price = price;
+
+    // Constructor with product and quantity
+    public CartItem(Product product, Integer quantity) {
+        this.product = product;
         this.quantity = quantity;
-        this.imageUrl = imageUrl;
     }
-    
+
+    // Constructor with product, quantity, and selected color
+    public CartItem(Product product, Integer quantity, String selectedColor) {
+        this.product = product;
+        this.quantity = quantity;
+        this.selectedColor = selectedColor;
+    }
+
     // Getters and setters
-    public Integer getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
-    
-    public void setProductId(Integer productId) {
-        this.productId = productId;
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
-    
-    public String getProductName() {
-        return productName;
-    }
-    
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-    
-    public BigDecimal getPrice() {
-        return price;
-    }
-    
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-    
+
     public Integer getQuantity() {
         return quantity;
     }
-    
+
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
-    
-    public String getImageUrl() {
-        return imageUrl;
+
+    public String getSelectedColor() {
+        return selectedColor;
     }
-    
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+
+    public void setSelectedColor(String selectedColor) {
+        this.selectedColor = selectedColor;
     }
-    
+
     // Calculated total for this cart item
     public BigDecimal getTotal() {
-        if (price != null && quantity != null) {
-            return price.multiply(new BigDecimal(quantity));
+        if (product != null && product.getPrice() != null && quantity != null) {
+            return product.getPrice().multiply(new BigDecimal(quantity));
         }
         return BigDecimal.ZERO;
     }
-    
+
     @Override
     public String toString() {
         return "CartItem{" +
-                "productId=" + productId +
-                ", productName='" + productName + '\'' +
-                ", price=" + price +
+                "product=" + product +
                 ", quantity=" + quantity +
-                ", imageUrl='" + imageUrl + '\'' +
                 ", total=" + getTotal() +
                 '}';
     }

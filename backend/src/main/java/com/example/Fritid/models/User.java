@@ -38,10 +38,7 @@ public class User {
     
     @Column(name = "city")
     private String city;
-    
-    @Column(name = "country")
-    private String country;
-    
+      
     @Column(name = "phone_number")
     private String phoneNumber;
     
@@ -145,14 +142,6 @@ public class User {
     
     public void setCity(String city) {
         this.city = city;
-    }
-    
-    public String getCountry() {
-        return country;
-    }
-    
-    public void setCountry(String country) {
-        this.country = country;
     }
     
     public String getPhoneNumber() {

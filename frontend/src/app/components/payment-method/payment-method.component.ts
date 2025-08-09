@@ -31,7 +31,7 @@ export class PaymentMethodComponent implements OnInit {
     private cartService: CartService,
     private authService: AuthService,
     private http: HttpClient,
-  private router: Router) {
+    private router: Router) {
     this.cardForm = this.fb.group({
       cardNumber: ['', [Validators.required, Validators.pattern('^[0-9 ]{16,19}$')]],
       expiryDate: ['', [Validators.required, Validators.pattern('^(0[1-9]|1[0-2])\\/?([0-9]{2})$')]],
@@ -83,8 +83,39 @@ export class PaymentMethodComponent implements OnInit {
     if (this.cardForm.valid) {
       console.log('Processing card payment', this.cardForm.value);
       this.paymentComplete.emit('card');
-      
+
       // Submit checkout data to backend
+      combineLatest([
+        this.checkoutService.personInfo$,
+        this.cartService.cartItems$
+      ])
+        .pipe(take(1))
+        .subscribe(([personInfo, cartItems]) => {
+          const currentUser = this.authService.getCurrentUser();
+          const payload = {
+            personInfo,
+            cartItems,
+            userId: currentUser?.id || null  // Include userId if logged in
+          };
+          console.log('Checkout payload:', payload);
+          this.http.post('http://localhost:8080/api/checkout', payload).subscribe({
+            next: (response) => {
+              console.log('Checkout success', response);
+              this.router.navigate(['/thank-you']);
+            },
+            error: (err) => {
+              console.error('Checkout failed', err);
+            }
+          });
+        });
+      }
+    }
+    
+    confirmCashPayment() {
+      console.log('Cash payment confirmed');
+      this.paymentComplete.emit('cash');
+      // Use observables to get the latest values
+      
       combineLatest([
         this.checkoutService.personInfo$,
         this.cartService.cartItems$
@@ -97,7 +128,8 @@ export class PaymentMethodComponent implements OnInit {
           cartItems,
           userId: currentUser?.id || null  // Include userId if logged in
         };
-
+        
+        console.log('Checkout payload:', payload);
         this.http.post('http://localhost:8080/api/checkout', payload).subscribe({
           next: (response) => {
             console.log('Checkout success', response);
@@ -108,37 +140,6 @@ export class PaymentMethodComponent implements OnInit {
           }
         });
       });
-    }
-  }
-
-  confirmCashPayment() {
-    console.log('Cash payment confirmed');
-    this.paymentComplete.emit('cash');
-    // Use observables to get the latest values
-
-    combineLatest([
-      this.checkoutService.personInfo$,
-      this.cartService.cartItems$
-    ])
-    .pipe(take(1))
-    .subscribe(([personInfo, cartItems]) => {
-      const currentUser = this.authService.getCurrentUser();
-      const payload = {
-        personInfo,
-        cartItems,
-        userId: currentUser?.id || null  // Include userId if logged in
-      };
-
-      this.http.post('http://localhost:8080/api/checkout', payload).subscribe({
-        next: (response) => {
-          console.log('Checkout success', response);
-          this.router.navigate(['/thank-you']);
-        },
-        error: (err) => {
-          console.error('Checkout failed', err);
-        }
-      });
-    });
   }
 
   processBankPayment() {

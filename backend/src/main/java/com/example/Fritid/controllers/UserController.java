@@ -107,9 +107,7 @@ public class UserController {
             if (userProfile.getCity() != null) {
                 user.setCity(userProfile.getCity());
             }
-            if (userProfile.getCountry() != null) {
-                user.setCountry(userProfile.getCountry());
-            }
+
             if (userProfile.getPhoneNumber() != null) {
                 user.setPhoneNumber(userProfile.getPhoneNumber());
             }

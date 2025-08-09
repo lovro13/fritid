@@ -34,11 +34,8 @@ export class CartComponent {
   removeItem(item: CartItem) {
     this.cartService.removeItemFromCart(item);
   }
-
   checkout() {
-    alert('Order placed!');
-    this.cartService.clearCart();
-    this.cartItems = [];
-    this.total = 0;
+    console.log("Proceeding to checkout with items:", this.cartItems);
   }
+
 }

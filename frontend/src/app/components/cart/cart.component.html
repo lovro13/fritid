@@ -32,7 +32,7 @@
     </table>
     <div class="cart-footer">
         <p class="total">{{total | number:'1.2-2'}}€</p>
-        <button [routerLink]="['/checkout']">🚀 Nadaljuj na plačilo</button>
+        <button [routerLink]="['/checkout']" (click)="checkout()">🚀 Nadaljuj na plačilo</button>
     </div>
     }
 </div>

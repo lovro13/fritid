@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { CheckoutService, PersonInfo } from '../../service/checkout.service';
 import { AuthService } from '../../service/auth.service';
+import { CartItem, CartService } from '../../service/cart.service';
 
 // ime
 // priimek
@@ -23,15 +24,20 @@ import { AuthService } from '../../service/auth.service';
 })
 export class CheckoutComponent {
   checkoutForm: FormGroup;
-  total: number = 1; // Example total from cart, replace with dynamic value if needed
   personInfo: any = BehaviorSubject;
+  private cartSub!: Subscription;
+  total = 0;
+  cartItems: CartItem[] = [];
 
+  
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private checkoutService: CheckoutService, // Inject service
-    private authService: AuthService
+    private authService: AuthService,
+    private cartService: CartService
   ) {
+    this.total = this.cartService.getTotal();
     this.checkoutForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
@@ -43,9 +49,10 @@ export class CheckoutComponent {
       companyID: [''] // Optional
     });
   }
-
+  
   ngOnInit() {
     // Auto-fill user data if logged in
+    this.cartSub = this.cartService.cartItems$.subscribe(items => { this.cartItems = items })
     const currentUser = this.authService.getCurrentUser();
     if (currentUser && currentUser.id) {
       this.authService.getUserById(currentUser.id).subscribe(
@@ -72,6 +79,7 @@ export class CheckoutComponent {
     if (this.checkoutForm.valid) {
       this.checkoutService.setPersonInfo(this.checkoutForm.value as PersonInfo);
       console.log('Form Submitted', this.checkoutForm.value);
+      console.log('With cart items:', this.cartItems);
       this.router.navigate(['/payment-method']);
     }
   }
