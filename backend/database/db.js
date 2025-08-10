@@ -26,11 +26,17 @@ const initializeDatabase = () => {
             postal_code VARCHAR(20),
             city VARCHAR(100),
             phone_number VARCHAR(20),
+            role VARCHAR(20) DEFAULT 'user',
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )
     `, (err) => {
         if (err) {
             console.error('Error creating users table:', err.message);
+        } else {
+            // Add role column if it doesn't exist (for existing databases)
+            db.run(`ALTER TABLE users ADD COLUMN role VARCHAR(20) DEFAULT 'user'`, (err) => {
+                // Ignore error if column already exists
+            });
         }
     });
 

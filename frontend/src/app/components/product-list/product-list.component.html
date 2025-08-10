@@ -28,22 +28,23 @@
 <!-- Products Section -->
 <div class="products-section">
     <h2>Naši izdelki</h2>
-    <div class="product-grid">
-        @for (product of products; track product) {
-        <div class="product-card">
+    <div class="product-grid" *ngIf="products$ | async as products; else loading">
+        <div *ngFor="let product of products" class="product-card">
             <div class="image-container">
-                <img [src]="product.imageUrl" [alt]="product.name">
+                <img [src]="product.image_url" [alt]="product.name">
             </div>
 
             <div class="card-content">
                 <h3>{{ product.name }}</h3>
-                <p class="price">{{ product.price | number:'1.2-2' }}</p>
+                <p class="price">{{ product.price | number:'1.2-2' }} €</p>
             </div>
 
-            <button [routerLink]="['product', product.id]">
+            <button [routerLink]="['/product', product.id]">
                 Dodaj v košarico
             </button>
         </div>
-        }
     </div>
+    <ng-template #loading>
+        <p>Loading products...</p>
+    </ng-template>
 </div>

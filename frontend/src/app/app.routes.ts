@@ -7,6 +7,8 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
 import { PaymentMethodComponent } from './components/payment-method/payment-method.component';
 import { ThankYouComponent } from './components/thank-you/thank-you.component';
 import { AuthComponent } from './components/auth/auth.component';
+import { ProductManagementComponent } from './components/admin/product-management/product-management.component';
+import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [ 
   { path: '', component: ProductListComponent },
@@ -17,5 +19,10 @@ export const routes: Routes = [
   { path: 'payment-method', component: PaymentMethodComponent },
   { path: 'thank-you', component: ThankYouComponent },
   { path: 'auth', component: AuthComponent },
+  { 
+    path: 'admin/products', 
+    component: ProductManagementComponent,
+    canActivate: [adminGuard] 
+  },
   { path: '**', redirectTo: '' }
 ];

@@ -1,0 +1,147 @@
+<div class="admin-container">
+  <h2>🛠️ Product Management</h2>
+
+  <!-- Product Form -->
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
+    <div class="form-row">
+      <div class="form-group" id="name-group">
+        <label for="name">Product Name *</label>
+        <input 
+          id="name"
+          formControlName="name" 
+          placeholder="Enter product name"
+          [class.error]="hasFieldError('name')">
+        <div class="error-message" *ngIf="hasFieldError('name')">
+          {{ getFieldError('name') }}
+        </div>
+      </div>
+      <div class="form-group" id="price-group">
+        <label for="price">Price (€) *</label>
+        <input 
+          id="price" 
+          type="number" 
+          step="0.01" 
+          formControlName="price" 
+          placeholder="0.00"
+          [class.error]="hasFieldError('price')">
+        <div class="error-message" *ngIf="hasFieldError('price')">
+          {{ getFieldError('price') }}
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-group" id="description-group">
+      <label for="description">Description</label>
+      <textarea id="description" formControlName="description" placeholder="Enter product description"></textarea>
+    </div>
+    
+    <div class="form-group" id="image-group">
+      <label for="image_url">Image URL *</label>
+      <input 
+        id="image_url" 
+        type="url" 
+        formControlName="image_url" 
+        placeholder="https://example.com/image.jpg"
+        [class.error]="hasFieldError('image_url')">
+      <div class="error-message" *ngIf="hasFieldError('image_url')">
+        {{ getFieldError('image_url') }}
+      </div>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group" id="category-group">
+        <label for="category">Category</label>
+        <input id="category" formControlName="category" placeholder="e.g., Bottles, Caps">
+      </div>
+      <div class="form-group" id="stock-group">
+        <label for="stock_quantity">Stock Quantity</label>
+        <input id="stock_quantity" type="number" formControlName="stock_quantity" placeholder="0">
+      </div>
+    </div>
+    
+    <div class="form-group" id="colors-group">
+      <label for="colors">Available Colors</label>
+      <input id="colors" formControlName="colors" placeholder="Black, Blue, Red, White">
+    </div>
+    
+    <div class="form-group checkbox">
+      <input id="is_active" type="checkbox" formControlName="is_active">
+      <label for="is_active">Product is active and visible to customers</label>
+    </div>
+    
+    <div class="form-actions">
+      <button type="submit" [disabled]="productForm.invalid">
+        {{ isEditing ? '💾 Update Product' : '➕ Create Product' }}
+      </button>
+      <button type="button" (click)="resetForm()" *ngIf="isEditing">
+        ❌ Cancel Edit
+      </button>
+    </div>
+  </form>
+
+  <!-- Product List -->
+  <div class="product-list-admin">
+    <h3>Existing Products</h3>
+    <div *ngIf="products$ | async as products; else loading">
+      <table *ngIf="products.length > 0; else noProducts">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Product Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of products">
+            <td data-label="ID">{{ product.id }}</td>
+            <td data-label="Product Name">
+              <div class="product-info">
+                <span class="name">{{ product.name }}</span>
+                <span class="description" *ngIf="product.description">
+                  {{ product.description.length > 50 ? product.description.substring(0, 50) + '...' : product.description }}
+                </span>
+              </div>
+            </td>
+            <td data-label="Category">
+              <span class="category">{{ product.category || 'Uncategorized' }}</span>
+            </td>
+            <td data-label="Price">
+              <span class="price">{{ product.price | currency:'EUR':'symbol':'1.2-2' }}</span>
+            </td>
+            <td data-label="Stock">
+              <span class="stock">{{ product.stock_quantity }}</span>
+            </td>
+            <td data-label="Status">
+              <span class="status" [class]="product.is_active ? 'status-active' : 'status-inactive'">
+                {{ product.is_active ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+            <td data-label="Actions">
+              <div class="actions">
+                <button (click)="onEdit(product)">Edit</button>
+                <button (click)="onDelete(product.id)">Delete</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <ng-template #noProducts>
+        <div style="text-align: center; padding: 3rem; color: #6c757d;">
+          <p style="font-size: 1.2rem;">📦 No products found</p>
+          <p>Create your first product using the form above!</p>
+        </div>
+      </ng-template>
+    </div>
+    
+    <ng-template #loading>
+      <div class="loading">
+        Loading products...
+      </div>
+    </ng-template>
+  </div>
+</div>

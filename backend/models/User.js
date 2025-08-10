@@ -12,6 +12,7 @@ class User {
         this.postalCode = userData.postal_code;
         this.city = userData.city;
         this.phoneNumber = userData.phone_number;
+        this.role = userData.role || 'user';
         this.createdAt = userData.created_at;
     }
 
@@ -69,12 +70,12 @@ class User {
 
     static async create(userData) {
         return new Promise((resolve, reject) => {
-            const { firstName, lastName, email, password } = userData;
+            const { firstName, lastName, email, password, role = 'user' } = userData;
             const passwordHash = bcrypt.hashSync(password, 10);
 
             db.run(
-                'INSERT INTO users (first_name, last_name, email, password_hash) VALUES (?, ?, ?, ?)',
-                [firstName, lastName, email, passwordHash],
+                'INSERT INTO users (first_name, last_name, email, password_hash, role) VALUES (?, ?, ?, ?, ?)',
+                [firstName, lastName, email, passwordHash, role],
                 function(err) {
                     if (err) {
                         reject(err);
@@ -93,10 +94,10 @@ class User {
                 db.run(
                     `UPDATE users SET 
                      first_name = ?, last_name = ?, email = ?, 
-                     address = ?, postal_code = ?, city = ?, phone_number = ?
+                     address = ?, postal_code = ?, city = ?, phone_number = ?, role = ?
                      WHERE id = ?`,
                     [this.firstName, this.lastName, this.email, 
-                     this.address, this.postalCode, this.city, this.phoneNumber, this.id],
+                     this.address, this.postalCode, this.city, this.phoneNumber, this.role, this.id],
                     (err) => {
                         if (err) {
                             reject(err);
@@ -125,6 +126,14 @@ class User {
 
     async validatePassword(password) {
         return bcrypt.compareSync(password, this.passwordHash);
+    }
+
+    isAdmin() {
+        return this.role === 'admin';
+    }
+
+    static async createAdmin(userData) {
+        return User.create({ ...userData, role: 'admin' });
     }
 
     toJSON() {

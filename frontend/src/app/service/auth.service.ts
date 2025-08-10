@@ -14,6 +14,7 @@ export interface User {
   city?: string;
   country?: string;
   phoneNumber?: string;
+  role?: 'user' | 'admin';
 }
 
 @Injectable({
@@ -21,41 +22,52 @@ export interface User {
 })
 export class AuthService {
   private userSubject = new BehaviorSubject<User | null>(null);
+  private tokenSubject = new BehaviorSubject<string | null>(null);
   public user$ = this.userSubject.asObservable();
+  public token$ = this.tokenSubject.asObservable();
 
   constructor(private http: HttpClient) {
     // Check if user is already logged in from localStorage
     const storedUser = localStorage.getItem('user');
-    if (storedUser) {
+    const storedToken = localStorage.getItem('token');
+    if (storedUser && storedToken) {
       this.userSubject.next(JSON.parse(storedUser));
+      this.tokenSubject.next(storedToken);
     }
   }
 
+  getToken(): string | null {
+    return this.tokenSubject.getValue();
+  }
+
   isLoggedIn(): boolean {
-    return this.userSubject.value !== null;
+    return !!this.getToken();
   }
 
   getCurrentUser(): User | null {
     return this.userSubject.value;
   }
 
-  login(email: string, password: string): Observable<{ success: boolean; message: string; user?: any }> {
+  login(email: string, password: string): Observable<{ success: boolean; message: string; user?: any, token?: string }> {
     // Send login request to backend
-    return this.http.post<{ success: boolean; message: string; user?: any }>(
+    return this.http.post<{ success: boolean; message: string; user?: any, token?: string }>(
       'http://localhost:8080/api/account/login',
       { email, password }
     ).pipe(
       tap(res => {
-        if (res.success && res.user) {
+        if (res.success && res.user && res.token) {
           const user: User = {
             id: res.user.id,
             email: res.user.email,
             firstName: res.user.firstName,
             lastName: res.user.lastName,
-            name: `${res.user.firstName} ${res.user.lastName}`
+            name: `${res.user.firstName} ${res.user.lastName}`,
+            role: res.user.role
           };
           localStorage.setItem('user', JSON.stringify(user));
+          localStorage.setItem('token', res.token);
           this.userSubject.next(user);
+          this.tokenSubject.next(res.token);
         }
       })
     );
@@ -85,6 +97,8 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     this.userSubject.next(null);
+    this.tokenSubject.next(null);
   }
 }
