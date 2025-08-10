@@ -14,9 +14,10 @@ const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const authRoutes = require('./routes/authRoutes');
+const checkoutRoutes = require('./routes/checkoutRoutes');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 // Middleware
 app.use(cors());
@@ -27,7 +28,8 @@ app.use(express.urlencoded({ extended: true }));
 initializeDatabase();
 
 // Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/account', authRoutes);
+app.use('/api/checkout', checkoutRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
