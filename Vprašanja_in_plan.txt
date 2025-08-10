@@ -1,0 +1,2 @@
+Plan:
+-- naredi da lahko admin dodaja stvari
