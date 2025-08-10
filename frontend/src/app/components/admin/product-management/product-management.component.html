@@ -36,13 +36,29 @@
     </div>
     
     <div class="form-group" id="image-group">
-      <label for="image_url">Image URL *</label>
-      <input 
-        id="image_url" 
-        type="url" 
-        formControlName="image_url" 
-        placeholder="https://example.com/image.jpg"
-        [class.error]="hasFieldError('image_url')">
+      <label for="image_file">Product Image *</label>
+      <div class="file-upload-container">
+        <input 
+          id="image_file" 
+          type="file" 
+          accept="image/*"
+          (change)="onImageSelected($event)"
+          [class.error]="hasFieldError('image_url')"
+          #fileInput>
+        <div class="file-upload-display" (click)="fileInput.click()">
+          <div *ngIf="!selectedImagePreview" class="upload-placeholder">
+            <span class="upload-icon">📷</span>
+            <span class="upload-text">Click to upload image</span>
+            <span class="upload-hint">JPG, PNG, GIF up to 5MB</span>
+          </div>
+          <div *ngIf="selectedImagePreview" class="image-preview">
+            <img [src]="selectedImagePreview" alt="Product preview">
+            <div class="image-overlay">
+              <span>Click to change image</span>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="error-message" *ngIf="hasFieldError('image_url')">
         {{ getFieldError('image_url') }}
       </div>
