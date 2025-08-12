@@ -31,9 +31,9 @@ router.get('/products/:id', adminAuth, async (req, res) => {
 // Create new product
 router.post('/products', adminAuth, async (req, res) => {
     try {
-        const { name, description, price, imageUrl, colors, category, stockQuantity } = req.body;
+        const { name, description, price, image_url, colors, category, stock_quantity } = req.body;
         
-        if (!name || !price || !imageUrl) {
+        if (!name || !price || !image_url) {
             return res.status(400).json({ error: 'Name, price, and image URL are required' });
         }
 
@@ -41,10 +41,10 @@ router.post('/products', adminAuth, async (req, res) => {
             name,
             description: description || '',
             price: parseFloat(price),
-            imageUrl,
+            image_url,
             colors: Array.isArray(colors) ? JSON.stringify(colors) : colors || '[]',
             category: category || '',
-            stockQuantity: parseInt(stockQuantity) || 0
+            stock_quantity: parseInt(stock_quantity) || 0
         };
 
         const product = await Product.create(productData);
@@ -63,17 +63,17 @@ router.put('/products/:id', adminAuth, async (req, res) => {
             return res.status(404).json({ error: 'Product not found' });
         }
 
-        const { name, description, price, imageUrl, colors, category, stockQuantity, isActive } = req.body;
+        const { name, description, price, image_url, colors, category, stock_quantity, is_active } = req.body;
         
         // Update product properties
         if (name !== undefined) product.name = name;
         if (description !== undefined) product.description = description;
         if (price !== undefined) product.price = parseFloat(price);
-        if (imageUrl !== undefined) product.imageUrl = imageUrl;
+        if (image_url !== undefined) product.image_url = image_url;
         if (colors !== undefined) product.colors = Array.isArray(colors) ? JSON.stringify(colors) : colors;
         if (category !== undefined) product.category = category;
-        if (stockQuantity !== undefined) product.stockQuantity = parseInt(stockQuantity);
-        if (isActive !== undefined) product.isActive = Boolean(isActive);
+        if (stock_quantity !== undefined) product.stock_quantity = parseInt(stock_quantity);
+        if (is_active !== undefined) product.is_active = Boolean(is_active);
 
         const updatedProduct = await product.save();
         res.json(updatedProduct);
@@ -105,7 +105,7 @@ router.patch('/products/:id/toggle-active', adminAuth, async (req, res) => {
             return res.status(404).json({ error: 'Product not found' });
         }
 
-        product.isActive = !product.isActive;
+        product.is_active = !product.is_active;
         const updatedProduct = await product.save();
         res.json(updatedProduct);
     } catch (error) {

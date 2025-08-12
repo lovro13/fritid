@@ -43,6 +43,15 @@ export class ProductManagementComponent implements OnInit {
 
   loadProducts(): void {
     this.products$ = this.adminService.getProducts();
+    // Add debugging to see what products we're getting
+    this.products$.subscribe(products => {
+      console.log('Loaded products:', products);
+      products.forEach(product => {
+        if (product.image_url) {
+          console.log(`Product ${product.name} has image URL: ${product.image_url}`);
+        }
+      });
+    });
   }
 
   onEdit(product: Product): void {
@@ -109,7 +118,7 @@ export class ProductManagementComponent implements OnInit {
       
       // Validate file size (5MB)
       if (file.size > 5 * 1024 * 1024) {
-        alert('File size must be less than 5MB.');
+        alert('File size must be less than 5MB.');  
         return;
       }
       
@@ -122,44 +131,35 @@ export class ProductManagementComponent implements OnInit {
       };
       reader.readAsDataURL(file);
       
-      // Generate unique URL for the image
-      const uniqueImageUrl = this.generateUniqueImageUrl(file);
-      this.productForm.patchValue({ image_url: uniqueImageUrl });
+      // Set a temporary placeholder to satisfy form validation
+      this.productForm.patchValue({ image_url: 'WILL_BE_UPLOADED' });
     }
   }
 
-  private generateUniqueImageUrl(file: File): string {
-    // Generate a unique identifier
-    const timestamp = Date.now();
-    const randomString = Math.random().toString(36).substring(2, 15);
-    const fileExtension = file.name.split('.').pop()?.toLowerCase() || 'jpg';
-    
-    // Create a unique filename
-    const uniqueFilename = `product_${timestamp}_${randomString}.${fileExtension}`;
-    
-    // Return a URL that would be used in production
-    // In a real application, this would be the URL where the file will be uploaded
-    return `https://your-app-domain.com/images/products/${uniqueFilename}`;
-  }
+  private async uploadImage(file: File): Promise<string> {
+    const formData = new FormData();
+    formData.append('file', file);
 
-  private async uploadImage(file: File, imageUrl: string): Promise<string> {
-    // In a real application, you would upload the file to your server or cloud storage
-    // For now, we'll simulate the upload process
-    
     this.isUploading = true;
     
     try {
-      // Simulate upload delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await fetch('http://localhost:8080/api/images/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to upload image');
+      }
+
+      const data = await response.json();
       
-      // In production, you would:
-      // 1. Upload the file to your backend/cloud storage
-      // 2. Return the actual URL where the file is stored
+      if (!data.success) {
+        throw new Error(data.message || 'Upload failed');
+      }
       
-      console.log('Uploading image:', file.name, 'to URL:', imageUrl);
-      
-      // For now, return the generated URL
-      return imageUrl;
+      console.log('Image uploaded successfully:', data.imageUrl);
+      return data.imageUrl;
     } catch (error) {
       console.error('Error uploading image:', error);
       throw error;
@@ -198,7 +198,7 @@ export class ProductManagementComponent implements OnInit {
     try {
       // Upload image if a new one was selected
       if (this.selectedImageFile) {
-        const uploadedImageUrl = await this.uploadImage(this.selectedImageFile, productData.image_url);
+        const uploadedImageUrl = await this.uploadImage(this.selectedImageFile);
         productData.image_url = uploadedImageUrl;
       }
 
@@ -268,5 +268,48 @@ export class ProductManagementComponent implements OnInit {
       }
     }
     return '';
+  }
+
+  onImageError(event: Event): void {
+    const target = event.target as HTMLImageElement;
+    if (target) {
+      target.style.display = 'none';
+    }
+  }
+
+  onImageLoad(event: Event): void {
+    const target = event.target as HTMLImageElement;
+    if (target) {
+      console.log('Image loaded successfully:', target.src);
+    }
+  }
+
+  getImageUrl(imageUrl: string): string {
+    if (!imageUrl) return '';
+    
+    // If the URL already includes the protocol, return as is
+    if (imageUrl.startsWith('http')) {
+      return imageUrl;
+    }
+    
+    // If it starts with /images/, prepend the backend URL
+    if (imageUrl.startsWith('/images/')) {
+      return `http://localhost:8080${imageUrl}`;
+    }
+    
+    // Otherwise, assume it's a relative path and construct the full URL
+    return `http://localhost:8080/images/${imageUrl}`;
+  }
+
+  isFormReadyForSubmit(): boolean {
+    const basicFormValid = this.productForm.get('name')?.valid && 
+                          this.productForm.get('price')?.valid;
+    
+    // For new products, we need either a selected image or an existing image_url
+    const hasImageForNewProduct = this.isEditing || this.selectedImageFile || 
+                                 (this.productForm.get('image_url')?.value && 
+                                  this.productForm.get('image_url')?.value !== 'WILL_BE_UPLOADED');
+    
+    return !!basicFormValid && hasImageForNewProduct;
   }
 }

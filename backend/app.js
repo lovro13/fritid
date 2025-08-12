@@ -16,6 +16,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const authRoutes = require('./routes/authRoutes');
 const checkoutRoutes = require('./routes/checkoutRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const imageRoutes = require('./routes/imageRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -24,6 +25,9 @@ const PORT = process.env.PORT || 8080;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static images
+app.use('/images', express.static(path.join(__dirname, 'uploads/images')));
 
 // Initialize database
 initializeDatabase();
@@ -35,6 +39,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/images', imageRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

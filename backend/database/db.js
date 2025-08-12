@@ -97,14 +97,6 @@ const initializeDatabase = () => {
     `, (err) => {
         if (err) {
             console.error('Error creating order_items table:', err.message);
-        } else {
-            // Seed database after tables are created
-            if (process.env.NODE_ENV !== 'production') {
-                const { seedDatabase } = require('./seed');
-                setTimeout(() => {
-                    seedDatabase();
-                }, 1000); // Delay to ensure tables are fully created
-            }
         }
     });
 

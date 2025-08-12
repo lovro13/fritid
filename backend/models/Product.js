@@ -6,12 +6,12 @@ class Product {
         this.name = productData.name;
         this.description = productData.description;
         this.price = parseFloat(productData.price);
-        this.imageUrl = productData.image_url;
+        this.image_url = productData.image_url; // Keep as image_url for consistency
         this.colors = productData.colors ? JSON.parse(productData.colors) : [];
         this.category = productData.category;
-        this.stockQuantity = productData.stock_quantity;
-        this.isActive = Boolean(productData.is_active);
-        this.createdAt = productData.created_at;
+        this.stock_quantity = productData.stock_quantity;
+        this.is_active = Boolean(productData.is_active);
+        this.created_at = productData.created_at;
     }
 
     static async findAll() {
@@ -76,16 +76,16 @@ class Product {
     static async create(productData) {
         return new Promise((resolve, reject) => {
             const {
-                name, description, price, imageUrl, colors = [],
-                category, stockQuantity = 0, isActive = true
+                name, description, price, image_url, colors = [],
+                category, stock_quantity = 0, is_active = true
             } = productData;
 
             db.run(
                 `INSERT INTO products 
                  (name, description, price, image_url, colors, category, stock_quantity, is_active) 
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                [name, description, price, imageUrl, JSON.stringify(colors), 
-                 category, stockQuantity, isActive ? 1 : 0],
+                [name, description, price, image_url, JSON.stringify(colors), 
+                 category, stock_quantity, is_active ? 1 : 0],
                 function(err) {
                     if (err) {
                         reject(err);
@@ -106,9 +106,9 @@ class Product {
                      name = ?, description = ?, price = ?, image_url = ?, 
                      colors = ?, category = ?, stock_quantity = ?, is_active = ?
                      WHERE id = ?`,
-                    [this.name, this.description, this.price, this.imageUrl,
-                     JSON.stringify(this.colors), this.category, this.stockQuantity, 
-                     this.isActive ? 1 : 0, this.id],
+                    [this.name, this.description, this.price, this.image_url,
+                     JSON.stringify(this.colors), this.category, this.stock_quantity, 
+                     this.is_active ? 1 : 0, this.id],
                     (err) => {
                         if (err) {
                             reject(err);

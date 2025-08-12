@@ -71,7 +71,7 @@ router.post('/', async (req, res) => {
 });
 
 // Update product (admin only)
-router.put('/:id', async (req, res) => {
+router.put('admin//:id', async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
         if (!product) {

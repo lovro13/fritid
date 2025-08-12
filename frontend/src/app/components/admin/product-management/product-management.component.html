@@ -6,64 +6,56 @@
     <div class="form-row">
       <div class="form-group" id="name-group">
         <label for="name">Product Name *</label>
-        <input 
-          id="name"
-          formControlName="name" 
-          placeholder="Enter product name"
-          [class.error]="hasFieldError('name')">
+        <input id="name" formControlName="name" placeholder="Enter product name" [class.error]="hasFieldError('name')">
         <div class="error-message" *ngIf="hasFieldError('name')">
           {{ getFieldError('name') }}
         </div>
       </div>
       <div class="form-group" id="price-group">
         <label for="price">Price (€) *</label>
-        <input 
-          id="price" 
-          type="number" 
-          step="0.01" 
-          formControlName="price" 
-          placeholder="0.00"
+        <input id="price" type="number" step="0.01" formControlName="price" placeholder="0.00"
           [class.error]="hasFieldError('price')">
         <div class="error-message" *ngIf="hasFieldError('price')">
           {{ getFieldError('price') }}
         </div>
       </div>
     </div>
-    
+
     <div class="form-group" id="description-group">
       <label for="description">Description</label>
       <textarea id="description" formControlName="description" placeholder="Enter product description"></textarea>
     </div>
-    
+
     <div class="form-group" id="image-group">
       <label for="image_file">Product Image *</label>
       <div class="file-upload-container">
-        <input 
-          id="image_file" 
-          type="file" 
-          accept="image/*"
-          (change)="onImageSelected($event)"
-          [class.error]="hasFieldError('image_url')"
-          #fileInput>
+        <input id="image_file" type="file" accept="image/*" (change)="onImageSelected($event)"
+          [class.error]="hasFieldError('image_url')" #fileInput>
         <div class="file-upload-display" (click)="fileInput.click()">
-          <div *ngIf="!selectedImagePreview" class="upload-placeholder">
+          @if(!selectedImagePreview){
+          <div class="upload-placeholder">
             <span class="upload-icon">📷</span>
             <span class="upload-text">Click to upload image</span>
             <span class="upload-hint">JPG, PNG, GIF up to 5MB</span>
           </div>
-          <div *ngIf="selectedImagePreview" class="image-preview">
+          }
+          @if(selectedImagePreview){
+          <div class="image-preview">
             <img [src]="selectedImagePreview" alt="Product preview">
             <div class="image-overlay">
               <span>Click to change image</span>
             </div>
           </div>
+          }
         </div>
       </div>
-      <div class="error-message" *ngIf="hasFieldError('image_url')">
+      @if(hasFieldError("image_url")) {
+      <div class="error-message">
         {{ getFieldError('image_url') }}
       </div>
+      }
     </div>
-    
+
     <div class="form-row">
       <div class="form-group" id="category-group">
         <label for="category">Category</label>
@@ -74,20 +66,34 @@
         <input id="stock_quantity" type="number" formControlName="stock_quantity" placeholder="0">
       </div>
     </div>
-    
+
     <div class="form-group" id="colors-group">
       <label for="colors">Available Colors</label>
       <input id="colors" formControlName="colors" placeholder="Black, Blue, Red, White">
     </div>
-    
+
     <div class="form-group checkbox">
       <input id="is_active" type="checkbox" formControlName="is_active">
       <label for="is_active">Product is active and visible to customers</label>
     </div>
-    
+
     <div class="form-actions">
-      <button type="submit" [disabled]="productForm.invalid">
-        {{ isEditing ? '💾 Update Product' : '➕ Create Product' }}
+      <!-- Debug info (remove in production) -->
+      <div style="font-size: 0.8rem; color: #666; margin-bottom: 1rem;">
+        <div>Form valid: {{ productForm.valid }}</div>
+        <div>Name valid: {{ productForm.get('name')?.valid }}</div>
+        <div>Price valid: {{ productForm.get('price')?.valid }}</div>
+        <div>Image URL: {{ productForm.get('image_url')?.value }}</div>
+        <div>Selected file: {{ selectedImageFile?.name || 'None' }}</div>
+        <div>Ready to submit: {{ isFormReadyForSubmit() }}</div>
+      </div>
+      
+      <button type="submit" [disabled]="!isFormReadyForSubmit() || isUploading">\
+        @if (isUploading) {
+          🔄 Uploading...
+        } @else {
+          {{ isEditing ? '💾 Update Product' : '➕ Create Product' }}
+        }
       </button>
       <button type="button" (click)="resetForm()" *ngIf="isEditing">
         ❌ Cancel Edit
@@ -102,6 +108,7 @@
       <table *ngIf="products.length > 0; else noProducts">
         <thead>
           <tr>
+            <th>Image</th>
             <th>ID</th>
             <th>Product Name</th>
             <th>Category</th>
@@ -113,12 +120,23 @@
         </thead>
         <tbody>
           <tr *ngFor="let product of products">
+            <td data-label="Image">
+              <div class="product-image">
+                @if (product.image_url) {
+                <img [src]="getImageUrl(product.image_url)" [alt]="product.name" class="product-thumbnail"
+                  (error)="onImageError($event)" (load)="onImageLoad($event)">
+                } @else {
+                <div class="no-image">📷</div>
+                }
+              </div>
+            </td>
             <td data-label="ID">{{ product.id }}</td>
             <td data-label="Product Name">
               <div class="product-info">
                 <span class="name">{{ product.name }}</span>
                 <span class="description" *ngIf="product.description">
-                  {{ product.description.length > 50 ? product.description.substring(0, 50) + '...' : product.description }}
+                  {{ product.description.length > 50 ? product.description.substring(0, 50) + '...' :
+                  product.description }}
                 </span>
               </div>
             </td>
@@ -145,7 +163,7 @@
           </tr>
         </tbody>
       </table>
-      
+
       <ng-template #noProducts>
         <div style="text-align: center; padding: 3rem; color: #6c757d;">
           <p style="font-size: 1.2rem;">📦 No products found</p>
@@ -153,7 +171,7 @@
         </div>
       </ng-template>
     </div>
-    
+
     <ng-template #loading>
       <div class="loading">
         Loading products...
