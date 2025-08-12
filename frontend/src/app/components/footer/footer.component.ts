@@ -16,7 +16,7 @@ export class FooterComponent {
   generalInfo: InfoPage[] = [];
   generalTerms: InfoPage[] = [];
   contactInfo = {
-    address: 'Spodnje Stranice 33, 1242 Stahovica',
+    address: 'Spodnje Stranje 33, 1242 Stahovica',
     phone: '051 338 710',
     email: 'info@tricd.si'
   };

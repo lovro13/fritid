@@ -43,15 +43,6 @@ export class ProductManagementComponent implements OnInit {
 
   loadProducts(): void {
     this.products$ = this.adminService.getProducts();
-    // Add debugging to see what products we're getting
-    this.products$.subscribe(products => {
-      console.log('Loaded products:', products);
-      products.forEach(product => {
-        if (product.image_url) {
-          console.log(`Product ${product.name} has image URL: ${product.image_url}`);
-        }
-      });
-    });
   }
 
   onEdit(product: Product): void {

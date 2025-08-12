@@ -78,22 +78,8 @@
     </div>
 
     <div class="form-actions">
-      <!-- Debug info (remove in production) -->
-      <div style="font-size: 0.8rem; color: #666; margin-bottom: 1rem;">
-        <div>Form valid: {{ productForm.valid }}</div>
-        <div>Name valid: {{ productForm.get('name')?.valid }}</div>
-        <div>Price valid: {{ productForm.get('price')?.valid }}</div>
-        <div>Image URL: {{ productForm.get('image_url')?.value }}</div>
-        <div>Selected file: {{ selectedImageFile?.name || 'None' }}</div>
-        <div>Ready to submit: {{ isFormReadyForSubmit() }}</div>
-      </div>
-      
-      <button type="submit" [disabled]="!isFormReadyForSubmit() || isUploading">\
-        @if (isUploading) {
-          🔄 Uploading...
-        } @else {
-          {{ isEditing ? '💾 Update Product' : '➕ Create Product' }}
-        }
+      <button type="submit" [disabled]="productForm.invalid">
+        {{ isEditing ? '💾 Update Product' : 'Create Product' }}
       </button>
       <button type="button" (click)="resetForm()" *ngIf="isEditing">
         ❌ Cancel Edit

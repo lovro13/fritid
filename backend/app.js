@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static images
-app.use('/images', express.static(path.join(__dirname, 'uploads/images')));
+app.use('/images/products', express.static(path.join(__dirname, 'uploads/images/products')));
 
 // Initialize database
 initializeDatabase();

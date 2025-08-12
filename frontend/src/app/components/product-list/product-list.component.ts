@@ -35,4 +35,21 @@ export class ProductListComponent implements OnInit {
   ngOnInit(): void {
     // The products are now fetched via the async pipe in the template
   }
+
+  getImageUrl(imageUrl: string): string {
+    if (!imageUrl) return '';
+    
+    // If the URL already includes the protocol, return as is
+    if (imageUrl.startsWith('http')) {
+      return imageUrl;
+    }
+    
+    // If it starts with /images/, prepend the backend URL
+    if (imageUrl.startsWith('/images/')) {
+      return `http://localhost:8080${imageUrl}`;
+    }
+    
+    // Otherwise, assume it's a relative path and construct the full URL
+    return `http://localhost:8080/images/${imageUrl}`;
+  }
 }

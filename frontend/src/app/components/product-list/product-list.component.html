@@ -31,7 +31,7 @@
     <div class="product-grid" *ngIf="products$ | async as products; else loading">
         <div *ngFor="let product of products" class="product-card">
             <div class="image-container">
-                <img [src]="product.image_url" [alt]="product.name">
+                <img [src]="getImageUrl(product.image_url)" [alt]="product.name">
             </div>
 
             <div class="card-content">
