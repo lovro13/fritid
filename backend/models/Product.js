@@ -7,7 +7,31 @@ class Product {
         this.description = productData.description;
         this.price = parseFloat(productData.price);
         this.image_url = productData.image_url; // Keep as image_url for consistency
-        this.colors = productData.colors ? JSON.parse(productData.colors) : [];
+        console.log('About to parse colors:', productData.colors, 'Type:', typeof productData.colors);
+        try {
+            if (!productData.colors || productData.colors === null || productData.colors === '') {
+                this.colors = [];
+            } else if (productData.colors === '[deafult]' || productData.colors === '[default]') {
+                // Handle the specific case where colors are stored as "[deafult]"
+                this.colors = ['Default'];
+            } else if (typeof productData.colors === 'string') {
+                // Try to parse as JSON
+                this.colors = JSON.parse(productData.colors);
+            } else if (Array.isArray(productData.colors)) {
+                this.colors = productData.colors;
+            } else {
+                this.colors = [];
+            }
+        } catch (error) {
+            console.warn('Failed to parse colors for product', productData.id, ':', productData.colors);
+            // If it's the problematic "[deafult]" text, convert it to a proper array
+            if (productData.colors === '[deafult]' || productData.colors === '[default]') {
+                this.colors = ['Default'];
+            } else {
+                this.colors = [];
+            }
+        }
+        console.log('Parsed colors:', this.colors);
         this.category = productData.category;
         this.stock_quantity = productData.stock_quantity;
         this.is_active = Boolean(productData.is_active);
@@ -16,11 +40,20 @@ class Product {
 
     static async findAll() {
         return new Promise((resolve, reject) => {
+            console.log("finding all products in models/Product.js");
             db.all('SELECT * FROM products WHERE is_active = 1', (err, rows) => {
                 if (err) {
+                    console.error('Database error in findAll:', err);
                     reject(err);
                 } else {
-                    resolve(rows.map(row => new Product(row)));
+                    console.log('Found products:', rows.length);
+                    const products = rows.map(row => {
+                        console.log('Processing row:', row.id);
+                        return new Product(row);
+                    });
+                    console.log('All products created successfully');
+                    resolve(products);
+                    console.log('resolve works');
                 }
             });
         });
@@ -84,9 +117,9 @@ class Product {
                 `INSERT INTO products 
                  (name, description, price, image_url, colors, category, stock_quantity, is_active) 
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                [name, description, price, image_url, JSON.stringify(colors), 
-                 category, stock_quantity, is_active ? 1 : 0],
-                function(err) {
+                [name, description, price, image_url, JSON.stringify(colors),
+                    category, stock_quantity, is_active ? 1 : 0],
+                function (err) {
                     if (err) {
                         reject(err);
                     } else {
@@ -107,8 +140,8 @@ class Product {
                      colors = ?, category = ?, stock_quantity = ?, is_active = ?
                      WHERE id = ?`,
                     [this.name, this.description, this.price, this.image_url,
-                     JSON.stringify(this.colors), this.category, this.stock_quantity, 
-                     this.is_active ? 1 : 0, this.id],
+                    JSON.stringify(this.colors), this.category, this.stock_quantity,
+                    this.is_active ? 1 : 0, this.id],
                     (err) => {
                         if (err) {
                             reject(err);
@@ -125,7 +158,7 @@ class Product {
 
     static async delete(id) {
         return new Promise((resolve, reject) => {
-            db.run('DELETE FROM products WHERE id = ?', [id], function(err) {
+            db.run('DELETE FROM products WHERE id = ?', [id], function (err) {
                 if (err) {
                     reject(err);
                 } else {
@@ -140,7 +173,7 @@ class Product {
             db.run(
                 'UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ? AND stock_quantity >= ?',
                 [quantity, id, quantity],
-                function(err) {
+                function (err) {
                     if (err) {
                         reject(err);
                     } else if (this.changes === 0) {

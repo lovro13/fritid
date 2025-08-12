@@ -51,7 +51,7 @@ router.post('/upload', upload.single('file'), (req, res) => {
         }
 
         // Create image URL
-        const imageUrl = `/images/products/${req.file.filename}`;
+        const imageUrl = `/images/${req.file.filename}`;
         
         res.json({
             success: true,

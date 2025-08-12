@@ -12,10 +12,12 @@ import { CommonModule, DecimalPipe } from '@angular/common';
   imports: [CommonModule, FormsModule, DecimalPipe]
 })
 export class ProductDetailComponent implements OnInit {
-  product: any;
+  product: Product | null = null;
   selectedColor: string = '';
   quantity: number = 1;
   selectedQuantity: number = 1;
+  loading: boolean = true;
+  error: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,15 +28,34 @@ export class ProductDetailComponent implements OnInit {
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != null) {
-      console.log("got product")
-      this.product = this.productService.getProductById(id);
+      console.log("Loading product with id:", id);
+      this.loading = true;
+      this.productService.getProductById(id).subscribe({
+        next: (product) => {
+          this.loading = false;
+          if (product) {
+            this.product = product;
+            this.selectedColor = product.colors && product.colors.length > 0 ? product.colors[0] : '';
+            console.log("Product loaded:", product);
+          } else {
+            this.error = "Product not found";
+            console.error("Product not found");
+          }
+        },
+        error: (error) => {
+          this.loading = false;
+          this.error = "Error loading product";
+          console.error("Error loading product:", error);
+        }
+      });
     } else {
+      this.loading = false;
+      this.error = "Product ID not found in route";
       console.error("Product id not found in route");
     }
-    this.selectedColor = this.product.colors[0];
   }
 
-  addToCart(product: any) {
+  addToCart(product: Product) {
     this.cartService.addItemToCart(product, this.selectedQuantity, this.selectedColor);
     // Reset quantity after adding to cart
     this.selectedQuantity = 1;

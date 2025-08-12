@@ -9,11 +9,10 @@
 # Node
 frontend/node_modules
 backend/node_modules
-frontend/.angular
+frontend/.angular/
 npm-debug.log
 yarn-error.log
 frontend/.angular
-.angular
 
 # IDEs and editors
 .idea/

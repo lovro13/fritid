@@ -438,3 +438,77 @@ $text-light: #6c757d;
     padding: 1.5rem;
   }
 }
+
+// Loading and Error States
+.loading-container,
+.error-container {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+
+  .loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid #e9ecef;
+    border-top: 6px solid $primary-blue;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1.2rem;
+    color: $text-light;
+    margin: 0;
+  }
+}
+
+.error-container {
+  .error-message {
+    background: white;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+
+    h2 {
+      color: #dc3545;
+      margin: 0 0 1rem 0;
+      font-size: 1.8rem;
+    }
+
+    p {
+      color: $text-light;
+      margin: 0 0 2rem 0;
+      font-size: 1.1rem;
+    }
+
+    .retry-btn {
+      background: $primary-blue;
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: #1565c0;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(25, 118, 210, 0.3);
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
