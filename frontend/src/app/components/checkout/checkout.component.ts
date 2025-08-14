@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, LOCALE_ID, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { CheckoutService, PersonInfo } from '../../service/checkout.service';
 import { AuthService } from '../../service/auth.service';
 import { CartItem, CartService } from '../../service/cart.service';
+import localeDe from '@angular/common/locales/de';
+import { CommonModule, DecimalPipe, registerLocaleData } from '@angular/common';
+
+registerLocaleData(localeDe);
 
 // ime
 // priimek
@@ -20,7 +24,10 @@ import { CartItem, CartService } from '../../service/cart.service';
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
-  imports: [ReactiveFormsModule, RouterLink]
+  imports: [ReactiveFormsModule, RouterLink, DecimalPipe, CommonModule],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'de' }
+  ]
 })
 export class CheckoutComponent {
   checkoutForm: FormGroup;

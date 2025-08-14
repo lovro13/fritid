@@ -9,7 +9,6 @@ import { CommonModule, registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { Observable } from 'rxjs';
 
-// Register German locale data
 registerLocaleData(localeDe);
 
 
