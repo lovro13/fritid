@@ -3,14 +3,15 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
 const helmet = require('helmet'); // Import helmet
+const logger = require('./logger');
 
 // Load environment variables
 const envPath = process.env.DOTENV_CONFIG_PATH || '.env';
 dotenv.config({ path: envPath });
-console.log(`Loading environment from: ${envPath}`);
+logger.info(`Loading environment from: ${envPath}`);
 
 // Import database initialization
-console.log(process.env.NODE_ENV)
+logger.info(process.env.NODE_ENV)
 const { initializeDatabase } = require('./database/db');
 
 // Import routes
@@ -89,7 +90,7 @@ app.use('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    logger.info(`Server is running on port ${PORT}`);
 });
 
 module.exports = app;

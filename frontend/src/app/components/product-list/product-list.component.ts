@@ -38,6 +38,6 @@ export class ProductListComponent implements OnInit {
 
   getImageUrl(imageUrl: string): string {
     if (!imageUrl) return '';
-    return  `${imageUrl}`;
+    return  `${environment.apiBase}${imageUrl}`;
   }
 }
