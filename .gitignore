@@ -6,6 +6,9 @@
 /out-tsc
 /bazel-out
 
+
+backend/logs
+backend/logs/
 # Node
 frontend/node_modules
 backend/node_modules

@@ -5,9 +5,12 @@ const path = require('path');
 const helmet = require('helmet'); // Import helmet
 
 // Load environment variables
-dotenv.config();
+const envPath = process.env.DOTENV_CONFIG_PATH || '.env';
+dotenv.config({ path: envPath });
+console.log(`Loading environment from: ${envPath}`);
 
 // Import database initialization
+console.log(process.env.NODE_ENV)
 const { initializeDatabase } = require('./database/db');
 
 // Import routes
