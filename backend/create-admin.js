@@ -16,14 +16,14 @@ async function createAdminUser() {
             firstName: 'Admin',
             lastName: 'Fritid',
             email: 'admin@fritid.com',
-            password: 'admin123',
+            password: 'vh8hruska',
             role: 'admin'
         };
 
         const admin = await User.create(adminData);
         console.log('Admin user created successfully:');
         console.log('Email: admin@fritid.com');
-        console.log('Password: admin123');
+        console.log('Password: vh8hruska');
         console.log('Role:', admin.role);
         
         // Close database connection

@@ -8,6 +8,7 @@ import { LOCALE_ID } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 registerLocaleData(localeDe);
 
@@ -37,18 +38,6 @@ export class ProductListComponent implements OnInit {
 
   getImageUrl(imageUrl: string): string {
     if (!imageUrl) return '';
-    
-    // If the URL already includes the protocol, return as is
-    if (imageUrl.startsWith('http')) {
-      return imageUrl;
-    }
-    
-    // If it starts with /images/, prepend the backend URL
-    if (imageUrl.startsWith('/images/')) {
-      return `http://localhost:8080${imageUrl}`;
-    }
-    
-    // Otherwise, assume it's a relative path and construct the full URL
-    return `http://localhost:8080/images/${imageUrl}`;
+    return  `${imageUrl}`;
   }
 }

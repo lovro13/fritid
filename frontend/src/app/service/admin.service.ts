@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product } from './products.service';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { AuthService } from './auth.service';
 export class AdminService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
-  private adminApiUrl = 'http://localhost:8080/api/admin';
+  private adminApiUrl = `${environment.apiBase}/admin`;
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.authService.getToken();

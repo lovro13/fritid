@@ -7,6 +7,7 @@ import { AuthService } from '../../service/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { combineLatest, take } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   standalone: true,
@@ -98,7 +99,7 @@ export class PaymentMethodComponent implements OnInit {
             userId: currentUser?.id || null  // Include userId if logged in
           };
           console.log('Checkout payload:', payload);
-          this.http.post('http://localhost:8080/api/checkout', payload).subscribe({
+          this.http.post( `${environment.apiBase}/checkout`, payload).subscribe({
             next: (response) => {
               console.log('Checkout success', response);
               this.router.navigate(['/thank-you']);
@@ -130,7 +131,8 @@ export class PaymentMethodComponent implements OnInit {
         };
         
         console.log('Checkout payload:', payload);
-        this.http.post('http://localhost:8080/api/checkout', payload).subscribe({
+        console.log('sending to backend: ', `${environment.apiBase}/checkout`)
+        this.http.post(`${environment.apiBase}/checkout`, payload).subscribe({
           next: (response) => {
             console.log('Checkout success', response);
             this.router.navigate(['/thank-you']);

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 export interface User {
   id: number;
@@ -51,7 +52,7 @@ export class AuthService {
   login(email: string, password: string): Observable<{ success: boolean; message: string; user?: any, token?: string }> {
     // Send login request to backend
     return this.http.post<{ success: boolean; message: string; user?: any, token?: string }>(
-      'http://localhost:8080/api/account/login',
+      `${environment.apiBase}/account/login`,
       { email, password }
     ).pipe(
       tap(res => {
@@ -84,15 +85,15 @@ export class AuthService {
     };
     console.log('Registration request:', registrationRequest);
     
-    return this.http.post('http://localhost:8080/api/account/register', registrationRequest);
+    return this.http.post('/account/register', registrationRequest);
   }
 
   getUserById(id: number): Observable<User> {
-    return this.http.get<User>(`http://localhost:8080/api/users/${id}`);
+    return this.http.get<User>(`${environment.apiBase}/users/${id}`);
   }
 
   updateUserProfile(id: number, profileData: Partial<User>): Observable<User> {
-    return this.http.put<User>(`http://localhost:8080/api/users/${id}/profile`, profileData);
+    return this.http.put<User>(`${environment.apiBase}/users/${id}/profile`, profileData);
   }
 
   logout(): void {

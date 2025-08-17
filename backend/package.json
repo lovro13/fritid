@@ -25,6 +25,7 @@
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
-    "sqlite3": "^5.1.7"
+    "mysql2": "^3.14.3",
+    "winston": "^3.17.0"
   }
 }

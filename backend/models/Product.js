@@ -1,4 +1,4 @@
-const { db } = require('../database/db');
+const { getPool } = require('../database/db');
 
 class Product {
     constructor(productData) {
@@ -39,151 +39,59 @@ class Product {
     }
 
     static async findAll() {
-        return new Promise((resolve, reject) => {
-            console.log("finding all products in models/Product.js");
-            db.all('SELECT * FROM products WHERE is_active = 1', (err, rows) => {
-                if (err) {
-                    console.error('Database error in findAll:', err);
-                    reject(err);
-                } else {
-                    console.log('Found products:', rows.length);
-                    const products = rows.map(row => {
-                        console.log('Processing row:', row.id);
-                        return new Product(row);
-                    });
-                    console.log('All products created successfully');
-                    resolve(products);
-                    console.log('resolve works');
-                }
-            });
-        });
+        const [rows] = await getPool().query(
+            'SELECT * FROM products WHERE is_active = 1 ORDER BY id DESC'
+        );
+        return rows;
     }
 
     static async findById(id) {
-        return new Promise((resolve, reject) => {
-            db.get('SELECT * FROM products WHERE id = ?', [id], (err, row) => {
-                if (err) {
-                    reject(err);
-                } else if (row) {
-                    resolve(new Product(row));
-                } else {
-                    resolve(null);
-                }
-            });
-        });
+        const [rows] = await getPool().query(
+            'SELECT * FROM products WHERE id = ? LIMIT 1', [id]
+        );
+        return rows[0] || null;
     }
 
-    static async search(query) {
-        return new Promise((resolve, reject) => {
-            const searchTerm = `%${query}%`;
-            db.all(
-                'SELECT * FROM products WHERE (name LIKE ? OR description LIKE ?) AND is_active = 1',
-                [searchTerm, searchTerm],
-                (err, rows) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(rows.map(row => new Product(row)));
-                    }
-                }
-            );
-        });
+    static async search(q) {
+        const like = `%${q}%`;
+        const [rows] = await getPool().query(
+            'SELECT * FROM products WHERE is_active = 1 AND (name LIKE ? OR description LIKE ?) ORDER BY id DESC',
+            [like, like]
+        );
+        return rows;
     }
 
     static async findByPriceRange(minPrice, maxPrice) {
-        return new Promise((resolve, reject) => {
-            db.all(
-                'SELECT * FROM products WHERE price BETWEEN ? AND ? AND is_active = 1',
-                [minPrice, maxPrice],
-                (err, rows) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(rows.map(row => new Product(row)));
-                    }
-                }
-            );
-        });
+        const [rows] = await getPool().query(
+            'SELECT * FROM products WHERE is_active = 1 AND price BETWEEN ? AND ? ORDER BY price ASC',
+            [minPrice, maxPrice]
+        );
+        return rows;
     }
 
-    static async create(productData) {
-        return new Promise((resolve, reject) => {
-            const {
-                name, description, price, image_url, colors = [],
-                category, stock_quantity = 0, is_active = true
-            } = productData;
-
-            db.run(
-                `INSERT INTO products 
-                 (name, description, price, image_url, colors, category, stock_quantity, is_active) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                [name, description, price, image_url, JSON.stringify(colors),
-                    category, stock_quantity, is_active ? 1 : 0],
-                function (err) {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        Product.findById(this.lastID).then(resolve).catch(reject);
-                    }
-                }
-            );
-        });
-    }
-
-    async save() {
-        return new Promise((resolve, reject) => {
-            if (this.id) {
-                // Update existing product
-                db.run(
-                    `UPDATE products SET 
-                     name = ?, description = ?, price = ?, image_url = ?, 
-                     colors = ?, category = ?, stock_quantity = ?, is_active = ?
-                     WHERE id = ?`,
-                    [this.name, this.description, this.price, this.image_url,
-                    JSON.stringify(this.colors), this.category, this.stock_quantity,
-                    this.is_active ? 1 : 0, this.id],
-                    (err) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(this);
-                        }
-                    }
-                );
-            } else {
-                reject(new Error('Cannot save product without ID'));
-            }
-        });
+    static async create(data) {
+        const { name, description, price, image_url, colors, category, stock_quantity, is_active } = data;
+        const [res] = await getPool().query(
+            `INSERT INTO products
+             (name, description, price, image_url, colors, category, stock_quantity, is_active)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+                name,
+                description ?? null,
+                price ?? 0,
+                image_url ?? null,
+                colors ? JSON.stringify(colors) : null,
+                category ?? null,
+                stock_quantity ?? 0,
+                is_active ?? 1
+            ]
+        );
+        return this.findById(res.insertId);
     }
 
     static async delete(id) {
-        return new Promise((resolve, reject) => {
-            db.run('DELETE FROM products WHERE id = ?', [id], function (err) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(this.changes > 0);
-                }
-            });
-        });
-    }
-
-    static async updateStock(id, quantity) {
-        return new Promise((resolve, reject) => {
-            db.run(
-                'UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ? AND stock_quantity >= ?',
-                [quantity, id, quantity],
-                function (err) {
-                    if (err) {
-                        reject(err);
-                    } else if (this.changes === 0) {
-                        reject(new Error('Insufficient stock'));
-                    } else {
-                        resolve(true);
-                    }
-                }
-            );
-        });
+        const [res] = await getPool().query('DELETE FROM products WHERE id = ?', [id]);
+        return res.affectedRows > 0;
     }
 }
 

@@ -33,7 +33,7 @@ const corsOptions = {
   origin: (origin, callback) => {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.length === 0 && !isProduction) {
+    if (allowedOrigins.length === 0 && !isProduction) { 
         // Allow all origins in dev if FRONTEND_URL is not set
         return callback(null, true);
     }
