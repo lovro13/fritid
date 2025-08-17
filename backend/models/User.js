@@ -1,4 +1,4 @@
-const { db } = require('../database/db');
+const { getPool } = require('../database/db');
 const bcrypt = require('bcryptjs');
 
 class User {
@@ -17,111 +17,64 @@ class User {
     }
 
     static async findAll() {
-        return new Promise((resolve, reject) => {
-            db.all('SELECT * FROM users', (err, rows) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(rows.map(row => new User(row)));
-                }
-            });
-        });
+        const pool = getPool();
+        const [rows] = await pool.execute('SELECT * FROM users');
+        return rows.map(row => new User(row));
     }
 
     static async findById(id) {
-        return new Promise((resolve, reject) => {
-            db.get('SELECT * FROM users WHERE id = ?', [id], (err, row) => {
-                if (err) {
-                    reject(err);
-                } else if (row) {
-                    resolve(new User(row));
-                } else {
-                    resolve(null);
-                }
-            });
-        });
+        const pool = getPool();
+        const [rows] = await pool.execute('SELECT * FROM users WHERE id = ?', [id]);
+        return rows.length > 0 ? new User(rows[0]) : null;
     }
 
     static async findByEmail(email) {
-        return new Promise((resolve, reject) => {
-            db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
-                if (err) {
-                    reject(err);
-                } else if (row) {
-                    resolve(new User(row));
-                } else {
-                    resolve(null);
-                }
-            });
-        });
+        const pool = getPool();
+        const [rows] = await pool.execute('SELECT * FROM users WHERE email = ?', [email]);
+        return rows.length > 0 ? new User(rows[0]) : null;
     }
 
     static async emailExists(email) {
-        return new Promise((resolve, reject) => {
-            db.get('SELECT COUNT(*) as count FROM users WHERE email = ?', [email], (err, row) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(row.count > 0);
-                }
-            });
-        });
+        const pool = getPool();
+        const [rows] = await pool.execute('SELECT COUNT(*) as count FROM users WHERE email = ?', [email]);
+        return rows[0].count > 0;
     }
 
     static async create(userData) {
-        return new Promise((resolve, reject) => {
-            const { firstName, lastName, email, password, role = 'user' } = userData;
-            const passwordHash = bcrypt.hashSync(password, 10);
+        const pool = getPool();
+        const { firstName, lastName, email, password, role = 'user' } = userData;
+        const passwordHash = bcrypt.hashSync(password, 10);
 
-            db.run(
-                'INSERT INTO users (first_name, last_name, email, password_hash, role) VALUES (?, ?, ?, ?, ?)',
-                [firstName, lastName, email, passwordHash, role],
-                function(err) {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        User.findById(this.lastID).then(resolve).catch(reject);
-                    }
-                }
-            );
-        });
+        const [result] = await pool.execute(
+            'INSERT INTO users (first_name, last_name, email, password_hash, role) VALUES (?, ?, ?, ?, ?)',
+            [firstName, lastName, email, passwordHash, role]
+        );
+        
+        return User.findById(result.insertId);
     }
 
     async save() {
-        return new Promise((resolve, reject) => {
-            if (this.id) {
-                // Update existing user
-                db.run(
-                    `UPDATE users SET 
-                     first_name = ?, last_name = ?, email = ?, 
-                     address = ?, postal_code = ?, city = ?, phone_number = ?, role = ?
-                     WHERE id = ?`,
-                    [this.firstName, this.lastName, this.email, 
-                     this.address, this.postalCode, this.city, this.phoneNumber, this.role, this.id],
-                    (err) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(this);
-                        }
-                    }
-                );
-            } else {
-                reject(new Error('Cannot save user without ID'));
-            }
-        });
+        if (!this.id) {
+            throw new Error('Cannot save user without ID');
+        }
+        
+        const pool = getPool();
+        await pool.execute(
+            `UPDATE users SET 
+             first_name = ?, last_name = ?, email = ?, 
+             address = ?, postal_code = ?, city = ?, phone_number = ?, role = ?
+             WHERE id = ?`,
+            [this.firstName, this.lastName, this.email, 
+             this.address, this.postalCode, this.city, this.phoneNumber, this.role, this.id]
+        );
+        
+        return this;
     }
 
     static async delete(id) {
-        return new Promise((resolve, reject) => {
-            db.run('DELETE FROM users WHERE id = ?', [id], function(err) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(this.changes > 0);
-                }
-            });
-        });
+        const pool = getPool();
+        const [result] = await pool.execute('DELETE FROM users WHERE id = ?', [id]);
+        return result.affectedRows > 0;
     }
 
     async validatePassword(password) {

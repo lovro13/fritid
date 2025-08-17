@@ -1,4 +1,4 @@
-const { db } = require('../database/db');
+const { getPool } = require('../database/db');
 
 class Order {
     constructor(orderData) {
@@ -29,131 +29,84 @@ class Order {
     }
 
     static async findAll() {
-        return new Promise((resolve, reject) => {
-            db.all('SELECT * FROM orders ORDER BY created_at DESC', (err, rows) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(rows.map(row => new Order(row)));
-                }
-            });
-        });
+        const pool = getPool();
+        const [rows] = await pool.execute('SELECT * FROM orders ORDER BY created_at DESC');
+        return rows.map(row => new Order(row));
     }
 
     static async findById(id) {
-        return new Promise((resolve, reject) => {
-            db.get('SELECT * FROM orders WHERE id = ?', [id], (err, row) => {
-                if (err) {
-                    reject(err);
-                } else if (row) {
-                    resolve(new Order(row));
-                } else {
-                    resolve(null);
-                }
-            });
-        });
+        const pool = getPool();
+        const [rows] = await pool.execute('SELECT * FROM orders WHERE id = ?', [id]);
+        return rows.length > 0 ? new Order(rows[0]) : null;
     }
 
     static async findByUserId(userId) {
-        return new Promise((resolve, reject) => {
-            db.all('SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC', [userId], (err, rows) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(rows.map(row => new Order(row)));
-                }
-            });
-        });
+        const pool = getPool();
+        const [rows] = await pool.execute('SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC', [userId]);
+        return rows.map(row => new Order(row));
     }
 
     static async create(orderData) {
-        return new Promise((resolve, reject) => {
-            const {
-                userId, totalAmount, status = Order.STATUS.PENDING,
-                shippingFirstName, shippingLastName, shippingEmail,
-                shippingAddress, shippingPostalCode, shippingCity, shippingPhoneNumber
-            } = orderData;
+        const pool = getPool();
+        const {
+            userId, totalAmount, status = Order.STATUS.PENDING,
+            shippingFirstName, shippingLastName, shippingEmail,
+            shippingAddress, shippingPostalCode, shippingCity, shippingPhoneNumber
+        } = orderData;
 
-            db.run(
-                `INSERT INTO orders 
-                 (user_id, total_amount, status, shipping_first_name, shipping_last_name, 
-                  shipping_email, shipping_address, shipping_postal_code, shipping_city, shipping_phone_number) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [userId, totalAmount, status, shippingFirstName, shippingLastName,
-                 shippingEmail, shippingAddress, shippingPostalCode, shippingCity, shippingPhoneNumber],
-                function(err) {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        Order.findById(this.lastID).then(resolve).catch(reject);
-                    }
-                }
-            );
-        });
+        const [result] = await pool.execute(
+            `INSERT INTO orders 
+             (user_id, total_amount, status, shipping_first_name, shipping_last_name, 
+              shipping_email, shipping_address, shipping_postal_code, shipping_city, shipping_phone_number) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [userId, totalAmount, status, shippingFirstName, shippingLastName,
+             shippingEmail, shippingAddress, shippingPostalCode, shippingCity, shippingPhoneNumber]
+        );
+
+        return Order.findById(result.insertId);
     }
 
     async updateStatus(newStatus) {
-        return new Promise((resolve, reject) => {
-            db.run(
-                'UPDATE orders SET status = ? WHERE id = ?',
-                [newStatus, this.id],
-                (err) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        this.status = newStatus;
-                        resolve(this);
-                    }
-                }
-            );
-        });
+        const pool = getPool();
+        await pool.execute(
+            'UPDATE orders SET status = ? WHERE id = ?',
+            [newStatus, this.id]
+        );
+        this.status = newStatus;
+        return this;
     }
 
     async loadOrderItems() {
-        return new Promise((resolve, reject) => {
-            db.all(
-                `SELECT oi.*, p.name as product_name, p.image_url as product_image_url 
-                 FROM order_items oi 
-                 JOIN products p ON oi.product_id = p.id 
-                 WHERE oi.order_id = ?`,
-                [this.id],
-                (err, rows) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        this.orderItems = rows.map(row => ({
-                            id: row.id,
-                            productId: row.product_id,
-                            productName: row.product_name,
-                            productImageUrl: row.product_image_url,
-                            quantity: row.quantity,
-                            price: parseFloat(row.price)
-                        }));
-                        resolve(this);
-                    }
-                }
-            );
-        });
+        const pool = getPool();
+        const [rows] = await pool.execute(
+            `SELECT oi.*, p.name as product_name, p.image_url as product_image_url 
+             FROM order_items oi 
+             JOIN products p ON oi.product_id = p.id 
+             WHERE oi.order_id = ?`,
+            [this.id]
+        );
+        
+        this.orderItems = rows.map(row => ({
+            id: row.id,
+            productId: row.product_id,
+            productName: row.product_name,
+            productImageUrl: row.product_image_url,
+            quantity: row.quantity,
+            price: parseFloat(row.price)
+        }));
+        
+        return this;
     }
 
     static async delete(id) {
-        return new Promise((resolve, reject) => {
-            // First delete order items
-            db.run('DELETE FROM order_items WHERE order_id = ?', [id], (err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    // Then delete the order
-                    db.run('DELETE FROM orders WHERE id = ?', [id], function(err) {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(this.changes > 0);
-                        }
-                    });
-                }
-            });
-        });
+        const pool = getPool();
+        
+        // First delete order items
+        await pool.execute('DELETE FROM order_items WHERE order_id = ?', [id]);
+        
+        // Then delete the order
+        const [result] = await pool.execute('DELETE FROM orders WHERE id = ?', [id]);
+        return result.affectedRows > 0;
     }
 }
 

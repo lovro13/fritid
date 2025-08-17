@@ -36,13 +36,44 @@ router.post('/', async (req, res) => {
         }
 
         // Create order items
-        const orderItemsPromises = cartItems.map(item => {
+        console.log('Creating order items for order ID:', order.id);
+        
+        // Validate that all products exist before creating order items
+        const Product = require('../models/Product');
+        
+        // First, let's see what products exist in the database
+        const allProducts = await Product.findAll();
+        console.log('Available products in database:');
+        allProducts.forEach(p => {
+            console.log(`- Product ID: ${p.id}, Name: ${p.name}`);
+        });
+        
+        // Then validate each cart item
+        for (const item of cartItems) {
+            console.log(`Checking if product ID ${item.product.id} exists...`);
+            const product = await Product.findById(item.product.id);
+            if (!product) {
+                console.log(`❌ Product with ID ${item.product.id} not found in database`);
+                console.log('Available product IDs:', allProducts.map(p => p.id));
+                throw new Error(`Product with ID ${item.product.id} not found in database`);
+            }
+            console.log(`✅ Product ${item.product.id} exists in database`);
+        }
+        
+        const orderItemsPromises = cartItems.map(async (item) => {
+            console.log('Processing cart item:', {
+                productId: item.product.id,
+                productName: item.product.name,
+                quantity: item.quantity,
+                price: item.product.price,
+                selectedColor: item.selectedColor
+            });
+            
             return OrderItem.create({
                 orderId: order.id,
                 productId: item.product.id,
                 quantity: item.quantity,
-                price: item.product.price,
-                color: item.selectedColor,
+                price: item.product.price
             });
         });
 

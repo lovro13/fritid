@@ -85,7 +85,7 @@ export class AuthService {
     };
     console.log('Registration request:', registrationRequest);
     
-    return this.http.post('/account/register', registrationRequest);
+    return this.http.post(`${environment.apiBase}/account/register`, registrationRequest);
   }
 
   getUserById(id: number): Observable<User> {

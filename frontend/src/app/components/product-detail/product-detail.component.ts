@@ -4,6 +4,7 @@ import { CartService } from '../../service/cart.service';
 import { Product, ProductsService } from "../../service/products.service";
 import { FormsModule } from '@angular/forms';
 import { CommonModule, DecimalPipe } from '@angular/common';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-product-detail',
@@ -18,6 +19,7 @@ export class ProductDetailComponent implements OnInit {
   selectedQuantity: number = 1;
   loading: boolean = true;
   error: string | null = null;
+  image_url = `${environment.apiBase}${this.product?.image_url}`;
 
   constructor(
     private route: ActivatedRoute,

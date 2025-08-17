@@ -1,4 +1,4 @@
-const { db } = require('../database/db');
+const { getPool } = require('../database/db');
 
 class OrderItem {
     constructor(orderItemData) {
@@ -10,87 +10,58 @@ class OrderItem {
     }
 
     static async findByOrderId(orderId) {
-        return new Promise((resolve, reject) => {
-            db.all(
-                'SELECT * FROM order_items WHERE order_id = ?',
-                [orderId],
-                (err, rows) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(rows.map(row => new OrderItem(row)));
-                    }
-                }
-            );
-        });
+        const pool = getPool();
+        const [rows] = await pool.execute(
+            'SELECT * FROM order_items WHERE order_id = ?',
+            [orderId]
+        );
+        return rows.map(row => new OrderItem(row));
     }
 
     static async create(orderItemData) {
-        return new Promise((resolve, reject) => {
-            const { orderId, productId, quantity, price } = orderItemData;
+        const pool = getPool();
+        const { orderId, productId, quantity, price } = orderItemData;
 
-            db.run(
-                'INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)',
-                [orderId, productId, quantity, price],
-                function(err) {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(new OrderItem({
-                            id: this.lastID,
-                            order_id: orderId,
-                            product_id: productId,
-                            quantity,
-                            price
-                        }));
-                    }
-                }
-            );
+        const [result] = await pool.execute(
+            'INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)',
+            [orderId, productId, quantity, price]
+        );
+
+        return new OrderItem({
+            id: result.insertId,
+            order_id: orderId,
+            product_id: productId,
+            quantity,
+            price
         });
     }
 
     static async createMultiple(orderItems) {
-        return new Promise((resolve, reject) => {
-            const stmt = db.prepare('INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)');
+        const pool = getPool();
+        const createdItems = [];
+        
+        for (const item of orderItems) {
+            const [result] = await pool.execute(
+                'INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)',
+                [item.orderId, item.productId, item.quantity, item.price]
+            );
             
-            const createdItems = [];
-            let completed = 0;
-            
-            orderItems.forEach((item) => {
-                stmt.run([item.orderId, item.productId, item.quantity, item.price], function(err) {
-                    if (err) {
-                        reject(err);
-                        return;
-                    }
-                    
-                    createdItems.push(new OrderItem({
-                        id: this.lastID,
-                        order_id: item.orderId,
-                        product_id: item.productId,
-                        quantity: item.quantity,
-                        price: item.price
-                    }));
-                    
-                    completed++;
-                    if (completed === orderItems.length) {
-                        stmt.finalize();
-                        resolve(createdItems);
-                    }
-                });
-            });
-        });
+            createdItems.push(new OrderItem({
+                id: result.insertId,
+                order_id: item.orderId,
+                product_id: item.productId,
+                quantity: item.quantity,
+                price: item.price
+            }));
+        }
+        
+        return createdItems;
     }
 
     static async deleteByOrderId(orderId) {
-        return new Promise((resolve, reject) => {
-            db.run('DELETE FROM order_items WHERE order_id = ?', [orderId], function(err) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(this.changes);
-                }
-            });
-        });
+        const pool = getPool();
+        const [result] = await pool.execute('DELETE FROM order_items WHERE order_id = ?', [orderId]);
+        return result.affectedRows;
     }
 }
 
