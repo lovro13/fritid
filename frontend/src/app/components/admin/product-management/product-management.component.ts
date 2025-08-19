@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { Observable } from 'rxjs';
 import { Product } from '../../../service/products.service';
 import { AdminService } from '../../../service/admin.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-product-management',
@@ -134,7 +135,7 @@ export class ProductManagementComponent implements OnInit {
     this.isUploading = true;
     
     try {
-      const response = await fetch('http://localhost:8080/api/images/upload', {
+      const response = await fetch(`${environment.apiBase}/api/images/upload`, {
         method: 'POST',
         body: formData
       });
@@ -285,11 +286,11 @@ export class ProductManagementComponent implements OnInit {
     
     // If it starts with /images/, prepend the backend URL
     if (imageUrl.startsWith('/images/')) {
-      return `http://localhost:8080${imageUrl}`;
+      return `${environment.apiBase}${imageUrl}`;
     }
     
     // Otherwise, assume it's a relative path and construct the full URL
-    return `http://localhost:8080/images/${imageUrl}`;
+    return `${environment.apiBase}/images/${imageUrl}`;
   }
 
   isFormReadyForSubmit(): boolean {
