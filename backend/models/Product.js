@@ -93,6 +93,34 @@ class Product {
         const [res] = await getPool().query('DELETE FROM products WHERE id = ?', [id]);
         return res.affectedRows > 0;
     }
+
+    static async update(id, data) {
+        const { name, description, price, image_url, colors, category, stock_quantity, is_active } = data;
+        const [res] = await getPool().query(
+            `UPDATE products SET 
+             name = ?,
+             description = ?,
+             price = ?,
+             image_url = ?,
+             colors = ?,
+             category = ?,
+             stock_quantity = ?,
+             is_active = ?
+             WHERE id = ?`,
+            [
+                name,
+                description ?? null,
+                price ?? 0,
+                image_url ?? null,
+                colors ? JSON.stringify(colors) : null,
+                category ?? null,
+                stock_quantity ?? 0,
+                is_active ?? 1,
+                id
+            ]
+        );
+        return this.findById(id);
+    }
 }
 
 module.exports = Product;

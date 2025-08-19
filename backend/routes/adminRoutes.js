@@ -72,17 +72,19 @@ router.put('/products/:id', adminAuth, async (req, res) => {
 
         const { name, description, price, image_url, colors, category, stock_quantity, is_active } = req.body;
         
-        // Update product properties
-        if (name !== undefined) product.name = name;
-        if (description !== undefined) product.description = description;
-        if (price !== undefined) product.price = parseFloat(price);
-        if (image_url !== undefined) product.image_url = image_url;
-        if (colors !== undefined) product.colors = Array.isArray(colors) ? JSON.stringify(colors) : colors;
-        if (category !== undefined) product.category = category;
-        if (stock_quantity !== undefined) product.stock_quantity = parseInt(stock_quantity);
-        if (is_active !== undefined) product.is_active = Boolean(is_active);
+        // Create updated product data
+        const productData = {
+            name: name !== undefined ? name : product.name,
+            description: description !== undefined ? description : product.description,
+            price: price !== undefined ? parseFloat(price) : product.price,
+            image_url: image_url !== undefined ? image_url : product.image_url,
+            colors: colors !== undefined ? colors : product.colors,
+            category: category !== undefined ? category : product.category,
+            stock_quantity: stock_quantity !== undefined ? parseInt(stock_quantity) : product.stock_quantity,
+            is_active: is_active !== undefined ? Boolean(is_active) : product.is_active
+        };
 
-        const updatedProduct = await product.save();
+        const updatedProduct = await Product.update(req.params.id, productData);
         logger.info(`Admin updated product ${req.params.id}`);
         res.json(updatedProduct);
     } catch (error) {
