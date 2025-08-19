@@ -6,7 +6,7 @@ const helmet = require('helmet'); // Import helmet
 const logger = require('./logger');
 
 // Load environment variables
-const envPath = process.env.DOTENV_CONFIG_PATH || '.env';
+const envPath = process.env.ENV_PATH || '.env';
 dotenv.config({ path: envPath });
 logger.info(`Loading environment from: ${envPath}`);
 
