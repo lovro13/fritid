@@ -35,6 +35,7 @@ export class ProductDetailComponent implements OnInit {
       this.productService.getProductById(id).subscribe({
         next: (product) => {
           this.loading = false;
+          console.log("product loaded", this.product);
           if (product) {
             this.product = product;
             this.selectedColor = product.colors && product.colors.length > 0 ? product.colors[0] : '';
@@ -56,6 +57,7 @@ export class ProductDetailComponent implements OnInit {
       console.error("Product id not found in route");
     }
     this.image_url = `${environment.apiBase}${this.product?.image_url}`;
+    console.log(this.image_url);
   }
   
   addToCart(product: Product) {
