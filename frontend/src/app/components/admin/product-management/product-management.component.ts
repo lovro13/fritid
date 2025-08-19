@@ -135,7 +135,7 @@ export class ProductManagementComponent implements OnInit {
     this.isUploading = true;
     
     try {
-      const response = await fetch(`${environment.apiBase}/api/images/upload`, {
+      const response = await fetch(`${environment.apiBase}/images/upload`, {
         method: 'POST',
         body: formData
       });
