@@ -35,11 +35,12 @@ export class ProductDetailComponent implements OnInit {
       this.productService.getProductById(id).subscribe({
         next: (product) => {
           this.loading = false;
-          console.log("product loaded", this.product);
           if (product) {
             this.product = product;
             this.selectedColor = product.colors && product.colors.length > 0 ? product.colors[0] : '';
             console.log("Product loaded:", product);
+            this.image_url = `${environment.apiBase}${this.product?.image_url}`;
+            console.log(this.image_url);
           } else {
             this.error = "Product not found";
             console.error("Product not found");
@@ -56,8 +57,6 @@ export class ProductDetailComponent implements OnInit {
       this.error = "Product ID not found in route";
       console.error("Product id not found in route");
     }
-    this.image_url = `${environment.apiBase}${this.product?.image_url}`;
-    console.log(this.image_url);
   }
   
   addToCart(product: Product) {
