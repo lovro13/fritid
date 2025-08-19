@@ -19,14 +19,14 @@ export class ProductDetailComponent implements OnInit {
   selectedQuantity: number = 1;
   loading: boolean = true;
   error: string | null = null;
-  image_url = `${environment.apiBase}${this.product?.image_url}`;
-
+  image_url = '';
+  
   constructor(
     private route: ActivatedRoute,
     private productService: ProductsService,
     private cartService: CartService
   ) { }
-
+  
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != null) {
@@ -55,14 +55,15 @@ export class ProductDetailComponent implements OnInit {
       this.error = "Product ID not found in route";
       console.error("Product id not found in route");
     }
+    this.image_url = `${environment.apiBase}${this.product?.image_url}`;
   }
-
+  
   addToCart(product: Product) {
     this.cartService.addItemToCart(product, this.selectedQuantity, this.selectedColor);
     // Reset quantity after adding to cart
     this.selectedQuantity = 1;
   }
-
+  
   increaseQuantity() {
     if (this.selectedQuantity < 99) {
       this.selectedQuantity++;
